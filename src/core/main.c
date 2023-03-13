@@ -1,15 +1,5 @@
-#include <stdio.h>
-#include <dirent.h>
-#include <term.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <string.h>
+#include "minishell.h"
+#include "parser.h"
 
 void	init_tflag(struct termios *t);
 void	init_cc(struct termios *t);
@@ -26,6 +16,7 @@ int main (int argc, char *argv[], char **envp)
 	struct termios t;
 	char *str;
 	int check;
+	t_data data;
 
 	if (tcgetattr (STDIN_FILENO, &t) == -1) // 상호작용하려는 대상 (첫번째 인자)의 속성값을 가져와 연결
 		return (1);
@@ -51,6 +42,8 @@ int main (int argc, char *argv[], char **envp)
 			write (1, "exit\n", 5);
 			exit (0);
 		}
+		data.line = str;
+		parse(&data);
 		free (str); //전달받은 문자열 malloc으로 할당했기때문에 free. 할당실패시 예외처리 추후 추가필요
 	}
 	return (0);
