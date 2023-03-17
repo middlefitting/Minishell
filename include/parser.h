@@ -69,13 +69,14 @@ typedef struct s_redirects
 typedef struct s_simple_cmd
 {
 	t_token	*file_path;
-	t_token	*argv[];
+	t_deque	*argv;
+	int		built_in_flag;
 }	t_simple_cmd;
 
 typedef struct s_cmd
 {
 	t_redirects 	*redirects;
-	t_simple_cmd	*t_simple_cmd;
+	t_simple_cmd	*simple_cmd;
 }	t_cmd;
 
 typedef struct s_pipe
@@ -86,14 +87,15 @@ typedef struct s_pipe
 
 
 t_deque	*get_deque();
-void	*append(t_deque *deque, t_token *token);
-void	*appendleft(t_deque *deque, t_token *token);
+void	append(t_deque *deque, t_token *token);
+void	appendleft(t_deque *deque, t_token *token);
 t_token	*pop(t_deque *deque);
 t_token	*popleft(t_deque *deque);
 t_token	*get_token();
 void	free_deque_with_token(t_deque *deque);
 void	free_deque(t_deque *deque);
 void	free_token(t_token *token);
-int	parse(t_data *data);
+int		parse(t_data *data);
+void	free_pipe(t_pipe *pipe);
 #endif
 

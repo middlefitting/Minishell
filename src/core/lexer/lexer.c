@@ -9,9 +9,9 @@ void print_parse_error(char *msg)
 
 void print_syntax_error(char *msg)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
 	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("'\n", 2);
 }
 
 int	renew_quote_flag(int flag, char c)
@@ -130,8 +130,7 @@ void init_lexer(t_lexer *lexer)
 	lexer->token = 0;
 	lexer->token_flag = 0;
 	lexer->tokens = 0;
-	while (!(lexer->tokens))
-		lexer->tokens = get_deque();
+	lexer->tokens = get_deque();
 }
 int	white_space(char c)
 {
@@ -198,6 +197,8 @@ void append_element(t_lexer *lexer, t_data *data)
 
 int	rediraction_token_possible(t_lexer *lexer, char next)
 {
+	if (ft_strcmp(lexer->token->content, "<<") == 0)
+		lexer->token->type = HEREDOC;
 	if (ft_strcmp(lexer->token->content, "<<") == 0 ||
 		ft_strcmp(lexer->token->content, ">>") == 0 ||
 		ft_strcmp(lexer->token->content, "<") == 0 && next != '<' ||
@@ -263,24 +264,155 @@ t_pipe *init_pipe()
 
 	pipe = 0;
 	while (!pipe)
-		pipe = calloc(1, sizeof(t_pipe));
+		pipe = ft_calloc(1, sizeof(t_pipe));
 	return (pipe);
 }
 
-int	pipe_parser(t_pipe *pipe, t_deque *deque)
+t_cmd *init_cmd()
+{
+	t_cmd	*cmd;
+
+	cmd = 0;
+	while (!cmd)
+		cmd = ft_calloc(1, sizeof(t_cmd));
+	return (cmd);
+}
+
+t_simple_cmd *init_simple_cmd()
+{
+	t_simple_cmd	*simple_cmd;
+
+	simple_cmd = 0;
+	while (!simple_cmd)
+		simple_cmd = ft_calloc(1, sizeof(t_simple_cmd));
+	return (simple_cmd);
+}
+
+t_redirects	*init_redirects()
+{
+	t_redirects	*redirects;
+
+	redirects = 0;
+	while(!redirects)
+		redirects = ft_calloc(1, sizeof(t_redirects));
+	return (redirects);
+}
+
+t_redirect	*init_redirect()
+{
+	t_redirect	*redirect;
+
+	redirect = 0;
+	while(!redirect)
+		redirect = ft_calloc(1, sizeof(t_redirect));
+	return (redirect);
+}
+
+void	set_built_in_flag(t_cmd *cmd, t_token *token)
+{
+	if (ft_strcmp(token->content, "echo") == 0 ||
+		ft_strcmp(token->content, "cd") == 0 ||
+		ft_strcmp(token->content, "pwd") == 0 ||
+		ft_strcmp(token->content, "export") == 0 ||
+		ft_strcmp(token->content, "unset") == 0 ||
+		ft_strcmp(token->content, "env") == 0 ||
+		ft_strcmp(token->content, "exit") == 0)
+		cmd->simple_cmd->built_in_flag = 1;
+	else
+		cmd->simple_cmd->built_in_flag = 0;
+}
+
+void	simple_cmd_parser(t_cmd *cmd, t_deque *tokens)
 {
 	t_token	*token;
 
-	token = popleft(deque);
-	if (!token)
-		return (1);
-	if (token->type == PIPE)
+	token = popleft(tokens);
+	if (!cmd->simple_cmd)
 	{
-		print_syntax_error("|");
-		appendleft(deque, token);
+		cmd->simple_cmd = init_simple_cmd();
+		cmd->simple_cmd->argv = get_deque();
+		set_built_in_flag(cmd, token);
+		cmd->simple_cmd->file_path = token;
+	}
+	append(cmd->simple_cmd->argv, token);
+}
+
+int	redirect_parser(t_redirect *redirect, t_deque *tokens)
+{
+	redirect->type = popleft(tokens);
+	if (!(tokens->top))
+	{
+		print_syntax_error("newline");
 		return (0);
 	}
-	return(1);
+	if (tokens->top->type == PIPE ||
+		tokens->top->type == REDIRECTION ||
+		tokens->top->type == HEREDOC)
+	{
+		print_syntax_error(tokens->top->content);
+		return (0);
+	}
+	redirect->file_name = popleft(tokens);
+	return (1);
+}
+
+int redirects_parser(t_redirects **redirects, t_deque *tokens)
+{
+	if (!(*redirects))
+	{
+		*redirects = init_redirects();
+		(*redirects)->redirect = init_redirect();
+		return (redirect_parser((*redirects)->redirect, tokens));
+	}
+	else
+		return (redirects_parser(&((*redirects)->redirects), tokens));
+}
+
+int cmd_parser(t_pipe *pipe, t_deque *tokens)
+{
+	t_token *token;
+	t_cmd	*cmd;
+
+	cmd = init_cmd();
+	pipe->cmd = cmd;
+	while (tokens->top != 0 && tokens->top->type != PIPE)
+	{
+		if (tokens->top->type == WORD)
+			simple_cmd_parser(cmd, tokens);
+		else if (tokens->top->type == REDIRECTION || tokens->top->type == HEREDOC)
+		{
+			if (!redirects_parser(&(cmd->redirects), tokens))
+				return(0);
+		}
+	}
+	return (1);
+}
+
+int	pipe_parser(t_pipe *pipe, t_deque *tokens)
+{
+	t_token	*token;
+	t_pipe *next_pipe;
+
+	if (!(tokens->top) ||
+		tokens->top->type == PIPE)
+	{
+		print_syntax_error("|");
+		return (0);
+	}
+	if (!cmd_parser(pipe, tokens))
+		return (0);
+	token = popleft(tokens);
+	if (!token)
+		return (1);
+	if (token->type != PIPE)
+	{
+		print_syntax_error("|");
+		return (0);
+	}
+	next_pipe = init_pipe();
+	pipe->pipe = next_pipe;
+	free_token(token);
+	return (pipe_parser(pipe->pipe, tokens));
 }
 
 int	parser(t_data *data)
@@ -288,7 +420,14 @@ int	parser(t_data *data)
 	t_pipe	*tree;
 
 	tree = init_pipe();
-	pipe_parser(tree, data->tokens);
+	if (!(data->tokens->top))
+		return (1);
+	if (!pipe_parser(tree, data->tokens))
+	{
+		free_pipe(tree);
+		return (0);
+	}
+	return (1);
 }
 
 /////////////////////////////////////////////////////////////
@@ -299,4 +438,20 @@ int	parse(t_data *data)
 		lexer(data) &&
 		parser(data)
 	);
+}
+
+////////////////////////////////////////////////////////////
+int	get_pipe_size(t_pipe *pipe)
+{
+	int		result;
+	t_pipe	*next;
+
+	result = 0;
+	next = pipe->pipe;
+	while (next)
+	{
+		result++;
+		next = next->pipe;
+	}
+	return (result);
 }
