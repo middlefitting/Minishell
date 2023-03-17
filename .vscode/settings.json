@@ -5,6 +5,7 @@
 		"history.h": "c",
 		"ioctl.h": "c",
 		"readline.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"typeinfo": "c"
 	}
 }

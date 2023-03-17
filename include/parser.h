@@ -26,6 +26,7 @@ enum	e_token_type {
 
 typedef struct s_token
 {
+	char			*name;
 	char			*content;
 	int				type;
 	struct s_token	*next;
@@ -52,6 +53,7 @@ typedef struct s_data
 {
 	char	*line;
 	t_deque	*tokens;
+	t_deque	*envs;
 }	t_data;
 
 typedef struct s_redirect
@@ -97,5 +99,13 @@ void	free_deque(t_deque *deque);
 void	free_token(t_token *token);
 int		parse(t_data *data);
 void	free_pipe(t_pipe *pipe);
-#endif
 
+
+void	env_init(t_data *data, char **envp);
+t_token	*get_env_token();
+char	*get_env(t_deque *envs, char *name);
+void	env_append(t_deque *envs, char *raw);
+int		white_space(char c);
+int		env_parser(t_data *data);
+int		renew_quote_flag(int flag, char c);
+#endif

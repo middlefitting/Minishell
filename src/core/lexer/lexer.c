@@ -433,11 +433,13 @@ int	parser(t_data *data)
 /////////////////////////////////////////////////////////////
 int	parse(t_data *data)
 {
-	return (
-		quote_check(data->line) &&
+	if (quote_check(data->line) &&
+		env_parser(data) &&
 		lexer(data) &&
-		parser(data)
-	);
+		parser(data))
+		return (1);
+	env_append(data->envs, "?=258");
+	return (0);
 }
 
 ////////////////////////////////////////////////////////////
