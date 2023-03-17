@@ -4,11 +4,13 @@ t_deque	*get_deque()
 {
 	t_deque *deque;
 
-	deque = ft_calloc(1, sizeof(t_deque));
+	deque = 0;
+	while(!deque)
+		deque = ft_calloc(1, sizeof(t_deque));
 	return deque;
 }
 
-void	*append(t_deque *deque, t_token *token)
+void	append(t_deque *deque, t_token *token)
 {
 	if (deque->size == 0)
 	{
@@ -26,7 +28,7 @@ void	*append(t_deque *deque, t_token *token)
 	deque->size = deque->size += 1;
 }
 
-void	*appendleft(t_deque *deque, t_token *token)
+void	appendleft(t_deque *deque, t_token *token)
 {
 	if (deque->size == 0)
 	{
