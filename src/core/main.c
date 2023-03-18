@@ -28,6 +28,7 @@ int main (int argc, char *argv[], char **envp)
 	signal (SIGINT, handler); //ctrl-c 입력시 새로운 프롬프트 출력
 	signal (SIGQUIT, SIG_IGN); //ctrl-\ 입력시 무시
 
+	env_init(&data, envp);
 	while (1)
 	{
 		str = readline ("minishell$ "); //minishell$ 출력후 입력받은 문자열을 str에 저장
@@ -44,7 +45,7 @@ int main (int argc, char *argv[], char **envp)
 		}
 		data.line = str;
 		parse(&data);
-		free (str); //전달받은 문자열 malloc으로 할당했기때문에 free. 할당실패시 예외처리 추후 추가필요
+		free (data.line); //전달받은 문자열 malloc으로 할당했기때문에 free. 할당실패시 예외처리 추후 추가필요
 	}
 	return (0);
 }

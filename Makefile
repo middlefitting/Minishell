@@ -17,7 +17,10 @@ SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/lexer/lexer.c \
 				$(SRCDIR)/core/lexer/deque.c \
 				$(SRCDIR)/core/lexer/free_struct.c \
-				$(SRCDIR)/core/lexer/token.c
+				$(SRCDIR)/core/lexer/token.c \
+				$(SRCDIR)/core/envp/envp.c \
+				$(SRCDIR)/core/envp/env_utils.c \
+				$(SRCDIR)/core/env_parser/env_parser.c
 OBJS		=	${SRCS:.c=.o}
 
 all :

@@ -4,6 +4,8 @@ void	free_token(t_token *token)
 {
 	if (token->content)
 		free(token->content);
+	if (token->name)
+		free(token->name);
 	free(token);
 	return ;
 }
