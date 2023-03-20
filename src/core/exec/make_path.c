@@ -10,7 +10,6 @@ void	make_path(t_process *proc)
 
 	execve_option = get_option (proc);
 	cmd = proc->pipe->cmd->simple_cmd->file_path->content;
-	cmd = m_strjoin ("/", cmd);
 	i = 0;
 	if (!get_env (proc->envp, "PATH"))
 	{
@@ -37,19 +36,21 @@ char	**get_option(t_process *proc)
 	i = 0;
 	while (argv->top != NULL)
 	{
-		option[i] = argv->top->content;
+		option[i++] = argv->top->content;
 		argv->top = argv->top->next;
 	}
 	return (option);
 }
 
-void	do_execve(t_process *proc, char **path_splitted, char **option, char *cmd)
+void	do_execve(t_process *proc, char **path_splitted, char **option, char *cmd_origin)
 {
 	char	**envp;
 	char	*path_cmd;
+	char	*cmd;
 	int		i;
 
 	i = 0;
+	cmd = m_strjoin ("/", cmd_origin);
 	envp = get_envs_pointer (proc->envp);
 	while (path_splitted[i])
 	{
@@ -58,7 +59,8 @@ void	do_execve(t_process *proc, char **path_splitted, char **option, char *cmd)
 		free (path_cmd);
 		i++;
 	}
-	if (execve (cmd, option, envp) < 0)
+	free (cmd);
+	if (execve (cmd_origin, option, envp) < 0)
 		write (2, "command not found\n", 18);
 	mexit_status = 127;
 	close_fds (proc, 1);

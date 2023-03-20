@@ -1,0 +1,18 @@
+total 152
+drwxr-xr-x@  17 ahkiler  staff    544  3 21 00:14 .
+drwxr-xr-x@   4 ahkiler  staff    128  3 21 00:14 ..
+drwxr-xr-x@  15 ahkiler  staff    480  3 20 18:42 .git
+drwxr-xr-x@   3 ahkiler  staff     96  3 20 17:24 .vscode
+-rw-r--r--    1 ahkiler  staff   2471  3 20 17:27 Makefile
+-rw-r--r--    1 ahkiler  staff     11  3 20 17:19 README.md
+-rw-r--r--    1 ahkiler  staff      0  3 21 00:14 a
+-rw-r--r--    1 ahkiler  staff     25  3 20 23:50 b
+drwxr-xr-x@   4 ahkiler  staff    128  3 20 17:24 deque
+-rw-r--r--    1 ahkiler  staff      3  3 20 21:52 hello
+drwxr-xr-x@   6 ahkiler  staff    192  3 21 00:12 include
+drwxr-xr-x@ 145 ahkiler  staff   4640  3 21 00:13 libft
+-rw-r--r--    1 ahkiler  staff   3208  3 20 17:24 main.c
+-rwxr-xr-x    1 ahkiler  staff  56768  3 21 00:13 minishell
+-rw-r--r--    1 ahkiler  staff      0  3 20 17:24 parser.c
+drwxr-xr-x@   3 ahkiler  staff     96  3 21 00:14 src
+-rw-r--r--    1 ahkiler  staff      0  3 20 17:19 test.c

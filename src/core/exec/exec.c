@@ -7,21 +7,18 @@ void	exec(t_pipe *tree, t_deque *envp)
 	proc = init_proc (tree, envp);
 	if (proc->pipe->pipe == NULL)
 	{
-		check_redir (proc);
 		if (proc->pipe->cmd->simple_cmd == NULL)
 			return ;
 		if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		{
+			check_redir (proc);
 			do_builtins (proc, 0);
 			return ;
 		}
 	}
-	// write (1, "init_success\n", 13);
 	if (proc->pipe->pipe != NULL)
 		do_pipe (proc, tree);
-	// write (1, "pipe_success\n", 13);
 	do_fork (proc, tree);//fork 실패시 예외처리 필요
-	//write (1, "fork_success\n", 13);
 	do_cmds (proc);
 }
 
@@ -98,7 +95,7 @@ void	do_cmds(t_process *proc)
 
 void	do_cmd(t_process *proc)
 {
-	if (proc->pipe->pipe != NULL)
+	if (proc->num_of_pipe)
 		close_and_dup (proc);
 	if (proc->pipe->cmd->redirects != NULL)
 		check_redir (proc);
