@@ -45,7 +45,7 @@ int main (int argc, char *argv[], char **envp)
 		}
 		data.line = str;
 		parse(&data);
-		free (data.line); //전달받은 문자열 malloc으로 할당했기때문에 free. 할당실패시 예외처리 추후 추가필요
+		free_data(&data);
 	}
 	return (0);
 }

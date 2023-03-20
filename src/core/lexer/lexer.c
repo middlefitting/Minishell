@@ -214,16 +214,18 @@ void	close_token(t_lexer *lexer, t_data *data)
 	next = data->line[lexer->index + 1];
 	if (!(lexer->token))
 		return ;
+	if (lexer->quote_flag)
+		return ;
 	// 널이거나 파이프라면 무조건 토큰 닫기
 	// quote 플래그가 0인데 whitespace 만나면 토큰 닫기
 	// 토큰타입이 리다이렉션이 아니고 < > 만나면 토큰 닫기
 	// 토큰타입이 리다이렉션이고 << >> 이라면 토큰 닫기
 	// 토큰타입이 pipe이면 토큰 닫기
-	if ((next == '\0' || next == '|') ||
-		(lexer->quote_flag == 0 && white_space(next)) ||
-		(lexer->token->type != REDIRECTION && (next == '<' || next == '>')) ||
+	if ((lexer->token->type != REDIRECTION && (next == '<' || next == '>')) ||
 		(lexer->token->type == REDIRECTION && rediraction_token_possible(lexer, next)) ||
-		(lexer->token->type == PIPE))
+		(lexer->token->type == PIPE) ||
+		(next == '\0' || next == '|') ||
+		(lexer->quote_flag == 0 && white_space(next)))
 	{
 		append(lexer->tokens, lexer->token);
 		lexer->token = 0;
@@ -420,13 +422,11 @@ int	parser(t_data *data)
 	t_pipe	*tree;
 
 	tree = init_pipe();
+	data->tree = tree;
 	if (!(data->tokens->top))
 		return (1);
 	if (!pipe_parser(tree, data->tokens))
-	{
-		free_pipe(tree);
 		return (0);
-	}
 	return (1);
 }
 

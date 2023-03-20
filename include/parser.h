@@ -49,13 +49,6 @@ typedef struct s_lexer
 	t_token *token;
 }	t_lexer;
 
-typedef struct s_data
-{
-	char	*line;
-	t_deque	*tokens;
-	t_deque	*envs;
-}	t_data;
-
 typedef struct s_redirect
 {
 	t_token *type;
@@ -88,6 +81,14 @@ typedef struct s_pipe
 }	t_pipe;
 
 
+typedef struct s_data
+{
+	char	*line;
+	t_deque	*tokens;
+	t_deque	*envs;
+	t_pipe	*tree;
+}	t_data;
+
 t_deque	*get_deque();
 void	append(t_deque *deque, t_token *token);
 void	appendleft(t_deque *deque, t_token *token);
@@ -108,4 +109,9 @@ void	env_append(t_deque *envs, char *raw);
 int		white_space(char c);
 int		env_parser(t_data *data);
 int		renew_quote_flag(int flag, char c);
+char	*join_line(char *dest, char *s);
+void	remove_env(t_deque *envs, char *name);
+char	**get_envs_pointer(t_deque *envs);
+char	**free_envs_pointer(char **envs);
+void	free_data(t_data *data);
 #endif
