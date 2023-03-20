@@ -55,6 +55,7 @@ char		*m_indiv_str(int str_len, char *str);
 int			m_str_len(char **str, char c);
 //--------------------------  m_function 1 & 2.c  -------------------------------
 int			m_strncmp(const char *s1, const char *s2, size_t n);
+int			m_strcmp(const char *s1, const char *s2);
 void		*m_calloc(size_t count, size_t size);
 void		m_bzero(void *s, size_t n);
 void		*m_memset(void *b, int c, size_t len);

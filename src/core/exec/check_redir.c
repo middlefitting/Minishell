@@ -33,7 +33,7 @@ void	check_infile(t_process * proc, t_token *file, char *content, int std_in) //
 		while (1)
 		{
 			str = get_next_line (std_in);
-			if (!ft_strcmp (file->content, str))
+			if (!m_strcmp (file->content, str))
 				break ;
 			write (fd, str, ft_strlen (str));
 		}
