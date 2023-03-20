@@ -72,5 +72,14 @@ void	env_init(t_data *data, char **envp)
 		printf("[%s] : [%s]\n", token->name, token->content);
 		token = token->next;
 	}
-	/////////////////////
+	/////////////////
+	char **p = get_envs_pointer(data->envs);
+	int s = 0;
+	while (p[s])
+	{
+		ft_putstr_fd(p[s], 1);
+		write(1, "\n", 1);
+		s++;
+	}
+	free_envs_pointer(p);
 }

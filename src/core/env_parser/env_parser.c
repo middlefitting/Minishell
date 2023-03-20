@@ -39,7 +39,11 @@ void	renew_line(t_data *data, int s, int e)
 	while (!new_line)
 		new_line = ft_substr(data->line, 0, s);
 	if (env)
+	{
+		new_line = join_line(new_line, "'");
 		new_line = join_line(new_line, env);
+		new_line = join_line(new_line, "'");
+	}
 	new_line = join_line(new_line, &(data->line[e]));
 	free(data->line);
 	data->line = new_line;

@@ -25,7 +25,8 @@ void	append(t_deque *deque, t_token *token)
 		deque->bottom = token;
 	}
 	token->next = 0;
-	deque->size = deque->size += 1;
+	// deque->size = deque->size += 1;
+	deque->size += 1;
 }
 
 void	appendleft(t_deque *deque, t_token *token)
@@ -43,7 +44,8 @@ void	appendleft(t_deque *deque, t_token *token)
 		deque->top = token;
 	}
 	token->pre = 0;
-	deque->size = deque->size += 1;
+	// deque->size = deque->size += 1;
+	deque->size += 1;
 }
 
 t_token	*pop(t_deque *deque)
@@ -65,7 +67,8 @@ t_token	*pop(t_deque *deque)
 	}
 	result->next = 0;
 	result->pre = 0;
-	deque->size = deque->size -= 1;
+	// deque->size = deque->size -= 1;
+	deque->size -= 1;
 	return (result);
 }
 
@@ -88,6 +91,7 @@ t_token	*popleft(t_deque *deque)
 	}
 	result->next = 0;
 	result->pre = 0;
-	deque->size = deque->size -= 1;
+	// deque->size = deque->size -= 1;
+	deque->size -= 1;
 	return (result);
 }
