@@ -114,4 +114,5 @@ void	remove_env(t_deque *envs, char *name);
 char	**get_envs_pointer(t_deque *envs);
 char	**free_envs_pointer(char **envs);
 void	free_data(t_data *data);
+int	get_pipe_size(t_pipe *pipe);
 #endif
