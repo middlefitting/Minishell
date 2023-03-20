@@ -5,6 +5,7 @@ void	exec(t_pipe *tree, t_deque *envp)
 {
 	t_process	*proc;
 	proc = init_proc (tree, envp);
+	mexit_status = 0;
 	if (proc->pipe->pipe == NULL)
 	{
 		if (proc->pipe->cmd->simple_cmd == NULL)
@@ -110,6 +111,7 @@ void	do_cmd(t_process *proc)
 void	exit_proc(t_process *proc)
 {
 	pid_t	pid;
+	char	*cur_status;
 	int		status;
 	int		i;
 
@@ -124,6 +126,8 @@ void	exit_proc(t_process *proc)
 		if (proc->pid == pid)
 			mexit_status = WEXITSTATUS(status);
 	}
+	cur_status = ft_strjoin ("?=", ft_itoa (mexit_status));
+	env_append (proc->envp, cur_status);
 }
 
 void	do_builtins(t_process *proc, int flag) //함수 실행 후 $?환경변수에 상태값 업데이트 필요
