@@ -136,21 +136,16 @@ void		m_unset(t_process *proc, int flag)
 
 void	recover_std(t_process *proc)
 {
-	t_redirect	*redirect;
-	char		*content;
+	dup2 (proc->std_in, STDIN_FILENO);
+	close (proc->std_in);
+	dup2 (proc->std_out, STDOUT_FILENO);
+	close (proc->std_out);
+}
 
-	if (proc->pipe->cmd->redirects == NULL)
-		return ;
-	redirect = proc->pipe->cmd->redirects->redirect;
-	content = redirect->type->content;
-	if (!ft_strcmp (content, "<<") || !ft_strcmp (content, "<"))
-	{
-		dup2 (proc->std_in, STDIN_FILENO);
-		close (proc->std_in);
-	}
-	else if (!ft_strcmp (content, ">>") || !ft_strcmp (content, ">"))
-	{
-		dup2 (proc->std_out, STDOUT_FILENO);
-		close (proc->std_out);
-	}
+void	save_std(t_process *proc)
+{
+	if (!proc->std_in)
+		proc->std_in = dup (STDIN_FILENO);
+	if (!proc->std_out)
+		proc->std_out = dup (STDOUT_FILENO);
 }

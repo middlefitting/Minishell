@@ -5,22 +5,21 @@ void	exec(t_pipe *tree, t_deque *envp)
 {
 	t_process	*proc;
 	proc = init_proc (tree, envp);
-	mexit_status = 0;
+	save_std (proc);
+	mk_heredoc (proc);
 	if (proc->num_of_pipe == 0)
 	{
 		if (proc->pipe->cmd->simple_cmd == NULL)
 		{
 			check_redir (proc);
-			if (proc->num_of_pipe == 0)
-				recover_std (proc);
+			recover_std (proc);
 			return ;
 		}
 		if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		{
 			check_redir (proc);
 			do_builtins (proc, 0);
-			if (proc->num_of_pipe == 0)
-				recover_std (proc);
+			recover_std (proc);
 			return ;
 		}
 	}
@@ -45,9 +44,11 @@ t_process	*init_proc(t_pipe *tree, t_deque *envp)
 	tmp->std_in = 0;
 	tmp->std_out = 0;
 	tmp->envp = envp;
+	tmp->heredoc_file = (char **) ft_calloc (tmp->num_of_pipe + 1, sizeof (char *));
 	tmp->fds = (int **) ft_calloc (tmp->num_of_pipe, sizeof (int *));
 	while (tmp->fd_idx < tmp->num_of_pipe)
 		tmp->fds[tmp->fd_idx++] = (int *) ft_calloc (2, sizeof (int));
+	tmp->fd_idx = 0;
 	return (tmp);
 }
 
@@ -130,6 +131,7 @@ void	exit_proc(t_process *proc)
 	{
 		status = 0;
 		pid = wait (&status);
+		rm_heredoc ();
 		if (pid > 0)
 			i++;
 		if (proc->pid == pid)
