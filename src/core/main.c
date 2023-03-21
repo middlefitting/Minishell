@@ -38,7 +38,7 @@ int main (int argc, char *argv[], char **envp)
 			exit (0);
 		}
 		add_history (str);
-		if (!strcmp (str, "exit")) //입력받은 문자열이 exit일 경우 종료 (ft_strcmp로 수정필요)
+		if (!ft_strcmp (str, "exit")) //입력받은 문자열이 exit일 경우 종료 (ft_strcmp로 수정필요)
 		{
 			write (1, "exit\n", 5);
 			exit (0);

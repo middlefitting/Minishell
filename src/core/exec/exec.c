@@ -6,18 +6,25 @@ void	exec(t_pipe *tree, t_deque *envp)
 	t_process	*proc;
 	proc = init_proc (tree, envp);
 	mexit_status = 0;
-	if (proc->pipe->pipe == NULL)
+	if (proc->num_of_pipe == 0)
 	{
 		if (proc->pipe->cmd->simple_cmd == NULL)
+		{
+			check_redir (proc);
+			if (proc->num_of_pipe == 0)
+				recover_std (proc);
 			return ;
+		}
 		if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		{
 			check_redir (proc);
 			do_builtins (proc, 0);
+			if (proc->num_of_pipe == 0)
+				recover_std (proc);
 			return ;
 		}
 	}
-	if (proc->pipe->pipe != NULL)
+	if (proc->num_of_pipe)
 		do_pipe (proc, tree);
 	do_fork (proc, tree);//fork 실패시 예외처리 필요
 	do_cmds (proc);
@@ -35,6 +42,8 @@ t_process	*init_proc(t_pipe *tree, t_deque *envp)
 	tmp->num_of_pipe = get_pipe_size (tree);
 	tmp->fd_idx = 0;
 	tmp->cmd = 0;
+	tmp->std_in = 0;
+	tmp->std_out = 0;
 	tmp->envp = envp;
 	tmp->fds = (int **) ft_calloc (tmp->num_of_pipe, sizeof (int *));
 	while (tmp->fd_idx < tmp->num_of_pipe)
@@ -96,12 +105,13 @@ void	do_cmds(t_process *proc)
 
 void	do_cmd(t_process *proc)
 {
+	//printf ("%s\n", proc->pipe->cmd->simple_cmd);
 	if (proc->num_of_pipe)
 		close_and_dup (proc);
 	if (proc->pipe->cmd->redirects != NULL)
 		check_redir (proc);
 	if (proc->pipe->cmd->simple_cmd == NULL)
-		return ;
+		exit(mexit_status) ;
 	if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		do_builtins (proc, 1);
 	else
@@ -116,7 +126,6 @@ void	exit_proc(t_process *proc)
 	int		i;
 
 	i = 0;
-	mexit_status = 0;
 	while (i <= proc->num_of_pipe)
 	{
 		status = 0;

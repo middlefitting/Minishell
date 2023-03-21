@@ -21,21 +21,28 @@ void	check_redir(t_process *proc)
 void	check_infile(t_process * proc, t_token *file, char *content) //ls lllll | wc 테스트필요
 {
 	char	*str;
+	char	buf[BUFFER_SIZE];
 	int		fd;
 
 	if (proc->pid == 1 && proc->pipe->cmd->simple_cmd != NULL
-		&& proc->pipe->cmd->simple_cmd->built_in_flag)
+		&& proc->pipe->cmd->simple_cmd->built_in_flag && !proc->std_in)
 		proc->std_in = dup (STDIN_FILENO);
-	if (!ft_strcmp (content, "<<"))
+	if (!ft_strcmp (content, "<<")) // <<만 들어오면 리턴
 	{
 		rm_heredoc ();
 		fd = open (mk_filename(), O_RDWR | O_CREAT, 0644);
 		while (1)
 		{
-			str = get_next_line (STDIN_FILENO);
-			if (!m_strcmp (file->content, str))
+			str = get_next_line (STDIN_FILENO);//read (STDIN_FILENO, str, BUFFER_SIZE);//
+			str[ft_strlen(str) - 1] = '\0';
+			if (!ft_strcmp (file->content, str))
+			{
+				free (str);
 				break ;
+			}
 			write (fd, str, ft_strlen (str));
+			write (fd, "\n", 1);
+			free (str);
 		}
 	}
 	else if (!ft_strcmp (content, "<"))
@@ -50,7 +57,7 @@ void	check_outfile(t_process *proc, t_token *file, char *content)
 	int	fd;
 
 	if (proc->pid == 1 && proc->pipe->cmd->simple_cmd != NULL
-		&& proc->pipe->cmd->simple_cmd->built_in_flag)
+		&& proc->pipe->cmd->simple_cmd->built_in_flag && !proc->std_out)
 		proc->std_out = dup (STDOUT_FILENO);
 	if (!ft_strcmp (content, ">>"))
 		fd = open (file->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
