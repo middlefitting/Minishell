@@ -143,14 +143,8 @@ void	recover_std(t_process *proc)
 		return ;
 	redirect = proc->pipe->cmd->redirects->redirect;
 	content = redirect->type->content;
-	if (!ft_strcmp (content, "<<") || !ft_strcmp (content, "<"))
-	{
-		dup2 (proc->std_in, STDIN_FILENO);
-		close (proc->std_in);
-	}
-	else if (!ft_strcmp (content, ">>") || !ft_strcmp (content, ">"))
-	{
-		dup2 (proc->std_out, STDOUT_FILENO);
-		close (proc->std_out);
-	}
+	dup2 (proc->std_in, STDIN_FILENO);
+	close (proc->std_in);
+	dup2 (proc->std_out, STDOUT_FILENO);
+	close (proc->std_out);
 }
