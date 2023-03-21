@@ -40,14 +40,17 @@ char	*mk_filename(void)
 void	rm_heredoc(void)
 {
 	char	*str;
+	int		exist;
 	int		i;
 
 	str = ft_strdup ("/tmp/here_doc000000");
+	exist = 0;
 	i = 0;
-	while (i <= 999999)
+	while (exist == 0)
 	{
 		mk_num (str, i++);
-		if (!access (str, F_OK))
+		exist = access (str, F_OK);
+		if (!exist)
 			unlink (str);
 	}
 }

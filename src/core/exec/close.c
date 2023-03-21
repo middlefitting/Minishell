@@ -5,24 +5,20 @@ void	close_and_dup(t_process *proc)
 	if (proc->cmd == 2)
 	{
 		close (proc->fds[0][READ]);
-		if (proc->pipe->cmd->redirects == NULL)
-			dup2 (proc->fds[0][WRITE], STDOUT_FILENO);
+		dup2 (proc->fds[0][WRITE], STDOUT_FILENO);
 		close (proc->fds[0][WRITE]);
 	}
 	else if (proc->pipe->pipe == NULL)
 	{
 		close (proc->fds[proc->cmd - 3][WRITE]);
-		if (proc->pipe->cmd->redirects == NULL)
-			dup2 (proc->fds[proc->cmd - 3][READ], STDIN_FILENO);
+		dup2 (proc->fds[proc->cmd - 3][READ], STDIN_FILENO);
 		close (proc->fds[proc->cmd - 3][READ]);
 	}
 	else
 	{
-		if (proc->pipe->cmd->redirects == NULL)
-			dup2 (proc->fds[proc->cmd - 3][READ], STDIN_FILENO);
+		dup2 (proc->fds[proc->cmd - 3][READ], STDIN_FILENO);
 		close (proc->fds[proc->cmd - 3][READ]);
-		if (proc->pipe->cmd->redirects == NULL)
-			dup2 (proc->fds[proc->cmd - 2][WRITE], STDOUT_FILENO);
+		dup2 (proc->fds[proc->cmd - 2][WRITE], STDOUT_FILENO);
 		close (proc->fds[proc->cmd - 2][WRITE]);
 	}
 	close_fds (proc, 0);

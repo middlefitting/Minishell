@@ -5,23 +5,28 @@ void	exec(t_pipe *tree, t_deque *envp)
 {
 	t_process	*proc;
 	proc = init_proc (tree, envp);
-	if (proc->pipe->pipe == NULL)
+	mexit_status = 0;
+	if (proc->num_of_pipe == 0)
 	{
-		check_redir (proc);
 		if (proc->pipe->cmd->simple_cmd == NULL)
+		{
+			check_redir (proc);
+			if (proc->num_of_pipe == 0)
+				recover_std (proc);
 			return ;
+		}
 		if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		{
+			check_redir (proc);
 			do_builtins (proc, 0);
+			if (proc->num_of_pipe == 0)
+				recover_std (proc);
 			return ;
 		}
 	}
-	// write (1, "init_success\n", 13);
-	if (proc->pipe->pipe != NULL)
+	if (proc->num_of_pipe)
 		do_pipe (proc, tree);
-	// write (1, "pipe_success\n", 13);
 	do_fork (proc, tree);//fork 실패시 예외처리 필요
-	//write (1, "fork_success\n", 13);
 	do_cmds (proc);
 }
 
@@ -37,6 +42,8 @@ t_process	*init_proc(t_pipe *tree, t_deque *envp)
 	tmp->num_of_pipe = get_pipe_size (tree);
 	tmp->fd_idx = 0;
 	tmp->cmd = 0;
+	tmp->std_in = 0;
+	tmp->std_out = 0;
 	tmp->envp = envp;
 	tmp->fds = (int **) ft_calloc (tmp->num_of_pipe, sizeof (int *));
 	while (tmp->fd_idx < tmp->num_of_pipe)
@@ -98,12 +105,13 @@ void	do_cmds(t_process *proc)
 
 void	do_cmd(t_process *proc)
 {
-	if (proc->pipe->pipe != NULL)
+	//printf ("%s\n", proc->pipe->cmd->simple_cmd);
+	if (proc->num_of_pipe)
 		close_and_dup (proc);
 	if (proc->pipe->cmd->redirects != NULL)
 		check_redir (proc);
 	if (proc->pipe->cmd->simple_cmd == NULL)
-		return ;
+		exit(mexit_status) ;
 	if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		do_builtins (proc, 1);
 	else
@@ -113,11 +121,11 @@ void	do_cmd(t_process *proc)
 void	exit_proc(t_process *proc)
 {
 	pid_t	pid;
+	char	*cur_status;
 	int		status;
 	int		i;
 
 	i = 0;
-	mexit_status = 0;
 	while (i <= proc->num_of_pipe)
 	{
 		status = 0;
@@ -127,6 +135,8 @@ void	exit_proc(t_process *proc)
 		if (proc->pid == pid)
 			mexit_status = WEXITSTATUS(status);
 	}
+	cur_status = ft_strjoin ("?=", ft_itoa (mexit_status));
+	env_append (proc->envp, cur_status);
 }
 
 void	do_builtins(t_process *proc, int flag) //함수 실행 후 $?환경변수에 상태값 업데이트 필요
