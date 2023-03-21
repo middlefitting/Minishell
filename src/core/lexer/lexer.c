@@ -243,7 +243,6 @@ int	lexer(t_data *data)
 		close_token(&lexer, data);
 		lexer.index = lexer.index + 1;
 	}
-
 	//테스트용 출력부///////////////////////////////////////////
 	t_token *token =lexer.tokens->top;
 	while (token)
@@ -253,6 +252,8 @@ int	lexer(t_data *data)
 	}
 	////////////////////////////////////////////////////////
 	data->tokens = lexer.tokens;
+	if (data->tokens->size == 0)
+		return (0);
 	return(1);
 }
 

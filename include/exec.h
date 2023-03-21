@@ -74,6 +74,6 @@ void		path_error(char *path);
 void 		mexit(int flag, int mexit_status);
 void		recover_std(t_process *proc);
 //--------------------------  free.c  -------------------------------
-void		free_proc(t_process *proc);
-void		free_all(char **str);
+void	free_proc(t_process *proc);
+void	free_all(char **str);
 #endif

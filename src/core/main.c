@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include "exec.h"
+#include "parser.h"
 
 void	init_tflag(struct termios *t);
 void	init_cc(struct termios *t);
@@ -18,6 +19,7 @@ int main (int argc, char *argv[], char **envp)
 	int check;
 	t_data data;
 
+	init_data(&data);
 	if (tcgetattr (STDIN_FILENO, &t) == -1) // 상호작용하려는 대상 (첫번째 인자)의 속성값을 가져와 연결
 		return (1);
 	init_tflag (&t); //bash가 설정한 터미널 값을 원하는 값으로 초기화 (현재 echoctl만 꺼놓음)
@@ -25,12 +27,13 @@ int main (int argc, char *argv[], char **envp)
 		return (1);
 	if (tgetent (NULL, "xterm-256color") == -1) // 현재 bash의 TERM환경변수 값을 가져옴.
 		return (1);
-	signal (SIGINT, handler); //ctrl-c 입력시 새로운 프롬프트 출력
-	signal (SIGQUIT, SIG_IGN); //ctrl-\ 입력시 무시
+	// signal (SIGINT, handler); //ctrl-c 입력시 새로운 프롬프트 출력
+	// signal (SIGQUIT, SIG_IGN); //ctrl-\ 입력시 무시
 
 	env_init(&data, envp);
 	while (1)
 	{
+		default_signal();
 		str = readline ("minishell$ "); //minishell$ 출력후 입력받은 문자열을 str에 저장
 		if (str == NULL)
 		{
@@ -44,8 +47,8 @@ int main (int argc, char *argv[], char **envp)
 			exit (0);
 		}
 		data.line = str;
-		parse(&data);
-		exec (data.tree, data.envs);
+		if (parse(&data))
+			exec (data.tree, data.envs);
 		free_data(&data);
 	}
 	return (0);

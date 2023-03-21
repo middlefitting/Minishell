@@ -29,27 +29,65 @@ char	*substr_env(t_data *data, int s, int e)
 	return (env);
 }
 
-void	renew_line(t_data *data, int s, int e)
+int		get_pre_token_type(t_data *data, int *index, int quote_flag)
+{
+	// int	quote_flag;
+	int i;
+	int	white_flag;
+
+	i = *index;
+	// quote_flag = 0;
+	white_flag = 0;
+
+	while ((i >= 0) &&
+			((quote_flag != 0) ||
+			(data->line[i] != '|' &&
+			data->line[i] != '<' &&
+			data->line[i] != '>')))
+	{
+		if (!white_space(data->line[i]) && white_flag == 1)
+			break;
+		if (quote_flag == 0 && white_space(data->line[i]))
+			white_flag = 1;
+		quote_flag = renew_quote_flag(quote_flag, data->line[i]);
+		i--;
+	}
+	if (i < 0)
+		return (DEFAULT);
+	if (data->line[i] == '<' && i > 0 && data->line[i - 1] == '<')
+		return HEREDOC;
+	if (data->line[i] == '<' || data->line[i] == '>')
+		return REDIRECTION;
+	return (DEFAULT);
+}
+
+void	renew_line(t_data *data, int s, int e, int *index, int quote_flag)
 {
 	char	*env;
 	char	*new_line;
+	int		pre_type;
 
+	pre_type = get_pre_token_type(data, index, quote_flag);
+	if (pre_type == HEREDOC)
+		return;
 	new_line = 0;
 	env = substr_env(data, s, e);
 	while (!new_line)
 		new_line = ft_substr(data->line, 0, s);
 	if (env)
 	{
-		new_line = join_line(new_line, "'");
+		new_line = join_line(new_line, "\'");
 		new_line = join_line(new_line, env);
-		new_line = join_line(new_line, "'");
+		new_line = join_line(new_line, "\'");
 	}
 	new_line = join_line(new_line, &(data->line[e]));
 	free(data->line);
 	data->line = new_line;
+	if (env)
+		*index += (ft_strlen(env) + 1);
 }
 
-void parse_env(t_data *data, int s)
+void parse_env(t_data *data, int s, int *index, int quote_flag)
 {
 	int		e;
 	char	*env;
@@ -66,7 +104,7 @@ void parse_env(t_data *data, int s)
 		e++;
 	if ((e - s) == 1)
 		return;
-	renew_line(data, s, e);
+	renew_line(data, s, e, index, quote_flag);
 }
 
 int	env_parser(t_data *data)
@@ -80,8 +118,8 @@ int	env_parser(t_data *data)
 	{
 		if (data->line[i] == '\'' || data->line[i] == '\"')
 			quote_flag = renew_quote_flag(quote_flag, data->line[i]);
-		if (quote_flag == 0 && data->line[i] == '$')
-			parse_env(data, i);
+		if (quote_flag != 1 && data->line[i] == '$')
+			parse_env(data, i, &i, quote_flag);
 		if (!data->line[i])
 			break;
 		i++;
