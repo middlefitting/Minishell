@@ -6,6 +6,7 @@
 		"ioctl.h": "c",
 		"readline.h": "c",
 		"stdlib.h": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"exec.h": "c"
 	}
 }

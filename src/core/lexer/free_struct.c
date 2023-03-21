@@ -80,7 +80,8 @@ void	free_data(t_data *data)
 		free_pipe(data->tree);
 	if (data->tokens)
 		free_deque_with_token(data->tokens);
-	free (data->line);
+	if (data->line)
+		free (data->line);
 	data->line = 0;
 	data->tokens = 0;
 	data->tree = 0;
