@@ -44,8 +44,8 @@ int main (int argc, char *argv[], char **envp)
 			exit (0);
 		}
 		data.line = str;
-		parse(&data);
-		exec (data.tree, data.envs);
+		if (parse(&data))
+			exec (data.tree, data.envs);
 		free_data(&data);
 	}
 	return (0);
