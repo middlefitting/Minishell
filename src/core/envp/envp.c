@@ -24,10 +24,14 @@ char	*get_env_name(char *raw)
 char	*get_env_content(char *raw)
 {
 	char	*content;
+	char	*target;
 
 	content = 0;
+	target = ft_strchr(raw, '=');
+	if (!target)
+		return (0);
 	while (!content)
-		content = ft_strdup(ft_strchr(raw, '=') + 1);
+		content = ft_strdup(target + 1);
 	return (content);
 }
 
@@ -82,4 +86,8 @@ void	env_init(t_data *data, char **envp)
 		s++;
 	}
 	free_envs_pointer(p);
+	env_append(data->envs, "??");
+	env_append(data->envs, "??");
+	ft_putstr_fd(data->envs->bottom->name, 1);
+	write(1, "\n", 1);
 }

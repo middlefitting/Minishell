@@ -52,8 +52,11 @@ char	**get_envs_pointer(t_deque *envs)
 		while (!envs_pointer[s])
 			envs_pointer[s] = ft_calloc(1, sizeof(char));
 		envs_pointer[s] = join_line(envs_pointer[s], env->name);
-		envs_pointer[s] = join_line(envs_pointer[s], "=");
-		envs_pointer[s] = join_line(envs_pointer[s], env->content);
+		if (env->content)
+		{
+			envs_pointer[s] = join_line(envs_pointer[s], "=");
+			envs_pointer[s] = join_line(envs_pointer[s], env->content);
+		}
 		append(envs, env);
 		s++;
 	}

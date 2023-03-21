@@ -119,4 +119,5 @@ void	init_data(t_data *data);
 void	default_signal(void);
 void	set_herdoc_signal(pid_t pid);
 void	set_signal(pid_t pid);
+char	*get_env_name(char *raw);
 #endif

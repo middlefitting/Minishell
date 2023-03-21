@@ -7,6 +7,14 @@
 		"readline.h": "c",
 		"stdlib.h": "c",
 		"typeinfo": "c",
-		"exec.h": "c"
+		"exec.h": "c",
+		"__locale": "c",
+		"atomic": "c",
+		"cstdlib": "c",
+		"locale": "c",
+		"new": "c",
+		"ostream": "c",
+		"algorithm": "c",
+		"complex": "c"
 	}
 }
