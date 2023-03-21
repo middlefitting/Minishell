@@ -16,6 +16,7 @@ typedef struct s_process
 	pid_t	pid;
 	t_pipe	*pipe;
 	t_deque	*envp;
+	char	**heredoc_file;
 	int		num_of_pipe;
 	int		fd_idx;
 	int		**fds;
@@ -34,10 +35,12 @@ void		exit_proc(t_process *proc);
 void		do_builtins(t_process *proc, int flag);
 //--------------------------  check_redir.c  -------------------------------
 void		check_redir(t_process *proc);
-void		check_infile(t_process * proc, t_token *file, char *content);
+void		check_infile(t_process * proc, t_redirects *redirects, t_token *file, char *content);
 void		check_outfile(t_process *proc, t_token *file, char *content);
-void		check_file(t_process *proc, int fd);
+void		check_file(t_process *proc, t_redirects *redirects, int fd);
 //--------------------------  here_doc.c  -------------------------------
+void		mk_heredoc(t_process *proc);
+void		check_heredoc(t_process *proc, t_redirects *redirects);
 void		mk_num(char *str, int num);
 char		*mk_filename(void);
 void		rm_heredoc(void);
@@ -73,6 +76,7 @@ void		m_env(t_process *proc, int flag);
 void		path_error(char *path);
 void 		mexit(int flag, int mexit_status);
 void		recover_std(t_process *proc);
+void		save_std(t_process *proc);
 //--------------------------  free.c  -------------------------------
 void	free_proc(t_process *proc);
 void	free_all(char **str);

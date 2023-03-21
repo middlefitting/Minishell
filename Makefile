@@ -10,8 +10,8 @@ DFLAGS		=	-g3 -fsanitize=address
 LFTDIR		=	libft
 SRCDIR		=	src
 INCDIR		=	./include
-LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L/opt/homebrew/opt/readline/lib
-INCS		=	-I $(LFTDIR) -I $(INCDIR) -I/opt/homebrew/opt/readline/include
+LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L /usr/local/opt/readline/lib
+INCS		=	-I $(LFTDIR) -I $(INCDIR) -I /usr/local/opt/readline/include
 
 SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/lexer/lexer.c \

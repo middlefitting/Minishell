@@ -50,6 +50,7 @@ int main (int argc, char *argv[], char **envp)
 		if (parse(&data))
 			exec (data.tree, data.envs);
 		free_data(&data);
+		rm_heredoc ();
 	}
 	return (0);
 }
