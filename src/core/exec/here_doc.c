@@ -3,7 +3,7 @@
 void	mk_num(char *str, int num)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	j = 1;
@@ -58,20 +58,17 @@ void	rm_heredoc(void)
 void	check_heredoc(t_process *proc, t_redirects *redirects)
 {
 	char	*str;
-	char	*file;
 	int		fd;
-
 
 	while (redirects)
 	{
 		if (!ft_strcmp (redirects->redirect->type->content, "<<"))
 		{
-			proc->heredoc_file[proc->fd_idx] = mk_filename();
-			fd = open (proc->heredoc_file[proc->fd_idx], O_WRONLY | O_CREAT, 0644);
+			fd = open (proc->heredoc_file[proc->fd_idx],
+					O_WRONLY | O_TRUNC | O_CREAT, 0644);
 			while (1)
 			{
-				str = get_next_line (proc->std_in);
-				str[ft_strlen(str) - 1] = '\0';
+				str = readline ("> ");
 				if (!ft_strcmp (redirects->redirect->file_name->content, str))
 				{
 					free (str);
@@ -94,6 +91,7 @@ void	mk_heredoc(t_process *proc)
 	pipe = proc->pipe;
 	while (pipe)
 	{
+		proc->heredoc_file[proc->fd_idx] = mk_filename();
 		if (pipe->cmd->redirects)
 			check_heredoc (proc, pipe->cmd->redirects);
 		proc->fd_idx++;

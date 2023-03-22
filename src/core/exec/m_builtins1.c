@@ -1,27 +1,22 @@
 #include "exec.h"
 
 extern int	mexit_status;
+
 void	m_echo(t_process *proc, t_deque *argv, int flag)
 {
 	t_token	*str;
 	int		option;
 	int		i;
 
-	option = 0;
-	popleft (argv);
-	str = popleft (argv);
-	if (str != NULL && !ft_strcmp ("-n", str->content))
-		option = 1;
-	else if (str)
-		appendleft (argv, str);
+	str = check_echo_option (argv, &option);
 	while (str)
 	{
 		i = 0;
-		str = popleft (argv);
 		while (str != NULL && str->content[i] != '\0')
 			write (STDOUT_FILENO, &str->content[i++], 1);
-		if (argv->top)
+		if (str->next)
 			write (STDOUT_FILENO, " ", 1);
+		str = str->next;
 	}
 	if (!option)
 		write (STDOUT_FILENO, "\n", 1);
@@ -30,17 +25,23 @@ void	m_echo(t_process *proc, t_deque *argv, int flag)
 	mexit (flag, mexit_status);
 }
 
-void mexit(int flag, int mexit_status)
+t_token	*check_echo_option(t_deque *argv, int *option)
 {
-	if (flag)
-		exit (mexit_status);
-	else
-		return ;
+	t_token	*str;
+
+	*option = 0;
+	str = argv->top->next;
+	while (str != NULL && !ft_strcmp ("-n", str->content))
+	{
+		*option = 1;
+		str = str->next;
+	}
+	return (str);
 }
 
 void	m_env(t_process *proc, int flag)
 {
-	t_token *env;
+	t_token	*env;
 	int		i;
 
 	env = proc->envp->top;
@@ -87,21 +88,6 @@ void	m_cd(t_process *proc, int flag)
 		free (cur_status);
 	}
 	return ;
-
-}
-
-void	path_error(char *path)
-{
-	struct stat	file;
-
-	mexit_status = 1;
-	if (stat(path, &file) == ERROR)
-	{
-		if (errno == ENOENT)
-			write (STDOUT_FILENO, "No such file or directory\n", 26);
-		else if (file.st_mode != S_IFDIR)
-			write (STDOUT_FILENO, "Not a directory\n", 16);
-	}
 }
 
 void	m_pwd(t_process *proc, int flag)
@@ -124,28 +110,4 @@ void	m_pwd(t_process *proc, int flag)
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
 	mexit (flag, mexit_status);
-}
-void		m_export(t_process *proc, int flag)
-{
-	return ;
-}
-void		m_unset(t_process *proc, int flag)
-{
-	return ;
-}
-
-void	recover_std(t_process *proc)
-{
-	dup2 (proc->std_in, STDIN_FILENO);
-	close (proc->std_in);
-	dup2 (proc->std_out, STDOUT_FILENO);
-	close (proc->std_out);
-}
-
-void	save_std(t_process *proc)
-{
-	if (!proc->std_in)
-		proc->std_in = dup (STDIN_FILENO);
-	if (!proc->std_out)
-		proc->std_out = dup (STDOUT_FILENO);
 }

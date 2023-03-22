@@ -1,6 +1,7 @@
-# include "exec.h"
+#include "exec.h"
 
 extern int	mexit_status;
+
 void	check_redir(t_process *proc)
 {
 	t_redirects	*redirects;
@@ -11,17 +12,18 @@ void	check_redir(t_process *proc)
 	{
 		content = redirects->redirect->type->content;
 		if (!ft_strcmp (content, "<<") || !ft_strcmp (content, "<"))
-			check_infile (proc, redirects, redirects->redirect->file_name, content);
+			check_infile (proc, redirects,
+				redirects->redirect->file_name, content);
 		else if (!ft_strcmp (content, ">>") || !ft_strcmp (content, ">"))
 			check_outfile (proc, redirects->redirect->file_name, content);
 		redirects = redirects->redirects;
 	}
 }
 
-void	check_infile(t_process * proc, t_redirects *redirects, t_token *file, char *content)
+void	check_infile(t_process *proc, t_redirects *redirects,
+	t_token *file, char *content)
 {
 	char	*str;
-	char	buf[BUFFER_SIZE];
 	int		fd;
 
 	if (!ft_strcmp (content, "<<"))
@@ -54,7 +56,7 @@ void	check_file(t_process *proc, t_redirects *redirects, int fd)
 {
 	if (fd < 0)
 	{
-		write (2, "no such file or directory\n", 26);
+		print_error (redirects->redirect->file_name->content, 0, 0);
 		close_fds (proc, 1);
 		mexit_status = 1;
 		exit (1);
