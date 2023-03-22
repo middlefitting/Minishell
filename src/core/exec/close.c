@@ -1,4 +1,4 @@
-# include "exec.h"
+#include "exec.h"
 
 void	close_and_dup(t_process *proc)
 {

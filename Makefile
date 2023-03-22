@@ -25,16 +25,18 @@ SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/exec/check_redir.c \
 				$(SRCDIR)/core/exec/close.c \
 				$(SRCDIR)/core/exec/exec.c \
+				$(SRCDIR)/core/exec/fork_pipe_cmd.c \
 				$(SRCDIR)/core/exec/here_doc.c \
 				$(SRCDIR)/core/exec/m_builtins1.c \
+				$(SRCDIR)/core/exec/m_builtins2.c \
 				$(SRCDIR)/core/exec/m_function1.c \
 				$(SRCDIR)/core/exec/m_function2.c \
+				$(SRCDIR)/core/exec/m_function3.c \
 				$(SRCDIR)/core/exec/m_split.c \
 				$(SRCDIR)/core/exec/make_path.c \
-				$(SRCDIR)/core/exec/get_next_line.c \
-				$(SRCDIR)/core/exec/get_next_line_utils.c\
-				$(SRCDIR)/core/exec/free.c\
-				$(SRCDIR)/core/signal/signal.c
+				$(SRCDIR)/core/exec/free.c \
+				$(SRCDIR)/core/signal/signal.c \
+				$(SRCDIR)/core/exec/print_error.c
 OBJS		=	${SRCS:.c=.o}
 
 all :

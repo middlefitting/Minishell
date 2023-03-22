@@ -1,6 +1,7 @@
-# include "exec.h"
+#include "exec.h"
 
 extern int	mexit_status;
+
 void	make_path(t_process *proc)
 {
 	char	**execve_option;
@@ -13,8 +14,7 @@ void	make_path(t_process *proc)
 	i = 0;
 	if (!get_env (proc->envp, "PATH"))
 	{
-		write (2, "command not found\n", 18);
-		mexit_status = 127;
+		print_error (cmd, 0, 1);
 		exit (127);
 	}
 	path_splitted = m_split (get_env (proc->envp, "PATH"), ':');
@@ -42,7 +42,8 @@ char	**get_option(t_process *proc)
 	return (option);
 }
 
-void	do_execve(t_process *proc, char **path_splitted, char **option, char *cmd_origin)
+void	do_execve(t_process *proc, char **path_splitted,
+	char **option, char *cmd_origin)
 {
 	char	**envp;
 	char	*path_cmd;
@@ -61,8 +62,7 @@ void	do_execve(t_process *proc, char **path_splitted, char **option, char *cmd_o
 	}
 	free (cmd);
 	if (execve (cmd_origin, option, envp) < 0)
-		write (2, "command not found\n", 18);
-	mexit_status = 127;
+		print_error (cmd_origin, 0, 1);
 	close_fds (proc, 1);
 	exit (127);
 }
