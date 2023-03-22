@@ -54,7 +54,18 @@ void	exit_proc(t_process *proc)
 		if (pid > 0)
 			i++;
 		if (proc->pid == pid)
+		{
+			ft_putnbr_fd(WEXITSTATUS(status), 1);
 			g_exit_status = WEXITSTATUS(status);
+		}
+		if (WIFSIGNALED(status))
+		{
+			g_exit_status = 128 + WTERMSIG (status);
+			if (WTERMSIG (status) == 2)
+				ft_putendl_fd("", STDERR_FILENO);
+			else if (WTERMSIG (status) == 3)
+				ft_putendl_fd("Quit: 3", STDOUT_FILENO);
+		}
 	}
 	rm_heredoc ();
 }

@@ -20,7 +20,7 @@ void	m_echo(t_process *proc, t_deque *argv, int flag)
 		write (STDOUT_FILENO, "\n", 1);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
-	mexit (flag, g_exit_status);
+	mexit (flag, 0);
 }
 
 t_token	*check_echo_option(t_deque *argv, int *option)
@@ -62,19 +62,26 @@ void	m_env(t_process *proc, int flag)
 
 void	m_cd(t_process *proc, int flag)
 {
-	char	*cur_status;
 	char	*path;
 	char	*home;
 	int		error;
+	char	*temp;
 
 	home = get_env (proc->envp, "HOME");
-	path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
-	if (path == NULL)
+	path = 0;
+	if (proc->pipe->cmd->simple_cmd->argv->top->next)
+		path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
+	if (path == NULL && home != NULL)
 		error = chdir (home);
-	else
+	else if (path != NULL)
 		error = chdir (path);
-	if (error == ERROR)
-		path_error (path);
+	if (error == ERROR || home == NULL)
+		path_error (path, home);
+	path = getcwd (NULL, 0);
+	temp = ft_strjoin("PWD=", path);
+	env_append(proc->envp, temp);
+	free(path);
+	free(temp);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
 	mexit (flag, g_exit_status);

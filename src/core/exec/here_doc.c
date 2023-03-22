@@ -69,6 +69,12 @@ void	check_heredoc(t_process *proc, t_redirects *redirects)
 			while (1)
 			{
 				str = readline ("> ");
+				if (!str)
+				{
+					free(str);
+					close(fd);
+					return ;
+				}
 				if (!ft_strcmp (redirects->redirect->file_name->content, str))
 				{
 					free (str);

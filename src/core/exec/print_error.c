@@ -1,13 +1,15 @@
 #include "exec.h"
 
-void	path_error(char *path)
+void	path_error(char *path, char *home)
 {
 	struct stat	file;
 
-	if (stat(path, &file) == ERROR)
+	if (!home)
+		print_error ("cd", path, 4);
+	else if (stat(path, &file) == ERROR)
 		if (errno == ENOENT)
 			print_error ("cd", path, 0);
-	if ((file.st_mode & S_IFMT) != S_IFDIR)
+	else if ((file.st_mode & S_IFMT) != S_IFDIR)
 		print_error ("cd", path, 3);
 }
 
@@ -45,6 +47,8 @@ void	print_errortype(char *str, int flags)
 		str = m_strjoin (str, ": not a valid identifier\n");
 	else if (flags == 3)
 		str = m_strjoin (str, ": Not a directory\n");
+	else if (flags == 4)
+		str = m_strjoin (str, ": HOME not set\n");
 	free (tmp);
 	write (2, str, ft_strlen (str));
 	free (str);

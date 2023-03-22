@@ -8,7 +8,17 @@
 		"stdlib.h": "c",
 		"typeinfo": "c",
 		"exec.h": "c",
+		"__locale": "c",
+		"atomic": "c",
 		"cstdlib": "c",
-		"locale": "c"
+		"locale": "c",
+		"new": "c",
+		"ostream": "c",
+		"algorithm": "c",
+		"complex": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }

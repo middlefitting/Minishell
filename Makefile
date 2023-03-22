@@ -10,8 +10,8 @@ DFLAGS		=	-g3 -fsanitize=address
 LFTDIR		=	libft
 SRCDIR		=	src
 INCDIR		=	./include
-LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L /usr/local/opt/readline/lib
-INCS		=	-I $(LFTDIR) -I $(INCDIR) -I /usr/local/opt/readline/include
+LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L/opt/homebrew/opt/readline/lib
+INCS		=	-I $(LFTDIR) -I $(INCDIR) -I/opt/homebrew/opt/readline/include
 
 SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/lexer/lexer.c \
@@ -36,7 +36,8 @@ SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/exec/make_path.c \
 				$(SRCDIR)/core/exec/free.c \
 				$(SRCDIR)/core/signal/signal.c \
-				$(SRCDIR)/core/exec/print_error.c
+				$(SRCDIR)/core/exec/print_error.c \
+				$(SRCDIR)/core/builtin/export.c
 OBJS		=	${SRCS:.c=.o}
 
 all :

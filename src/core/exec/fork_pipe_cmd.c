@@ -26,6 +26,7 @@ int	do_fork(t_process *proc, t_pipe *tree)
 			proc->pid = fork ();
 		else
 			return (0);
+		set_signal(proc->pid);
 		if (proc->pid == 0) //signal setting
 		{
 			proc->pipe = tmp;
