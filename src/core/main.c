@@ -11,7 +11,7 @@ void	handler(int sig);
 //signal handler - 상호작용하는 부모프로세스의 경우 전달받는 signal의 역할이 명령실행(자식)시 전달받는
 //signal의 역할과 다르기때문
 //envp - 실행부에서 환경변수를 통해서 execve를 실행하기때문
-int	mexit_status = 0;
+int g_exit_status = 0;
 int main (int argc, char *argv[], char **envp)
 {
 	struct termios t;
@@ -50,7 +50,6 @@ int main (int argc, char *argv[], char **envp)
 		if (parse(&data))
 			exec (data.tree, data.envs);
 		free_data(&data);
-		rm_heredoc ();
 	}
 	return (0);
 }
