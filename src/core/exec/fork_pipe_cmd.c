@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	do_pipe(t_process *proc, t_pipe *tree)
 {
 	int	i;
@@ -61,7 +59,7 @@ void	do_cmd(t_process *proc)
 	if (proc->pipe->cmd->redirects != NULL)
 		check_redir (proc);
 	if (proc->pipe->cmd->simple_cmd == NULL)
-		exit(mexit_status);
+		exit(g_exit_status);
 	if (proc->pipe->cmd->simple_cmd->built_in_flag)
 		do_builtins (proc, 1);
 	else

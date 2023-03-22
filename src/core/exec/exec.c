@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	exec(t_pipe *tree, t_deque *envp)
 {
 	t_process	*proc;
@@ -56,9 +54,7 @@ void	exit_proc(t_process *proc)
 		if (pid > 0)
 			i++;
 		if (proc->pid == pid)
-			mexit_status = WEXITSTATUS(status);
+			g_exit_status = WEXITSTATUS(status);
 	}
-	cur_status = ft_strjoin ("?=", ft_itoa (mexit_status));
-	env_append (proc->envp, cur_status);
 	rm_heredoc ();
 }

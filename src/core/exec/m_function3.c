@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	recover_std(t_process *proc)
 {
 	dup2 (proc->std_in, STDIN_FILENO);
@@ -18,8 +16,9 @@ void	save_std(t_process *proc)
 
 void	mexit(int flag, int mexit_status)
 {
+	g_exit_status = mexit_status;
 	if (flag)
-		exit (mexit_status);
+		exit (g_exit_status);
 	else
 		return ;
 }

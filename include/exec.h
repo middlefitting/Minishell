@@ -10,6 +10,7 @@
 # define WRITE			1
 # define ERROR			-1
 
+int	g_exit_status;
 typedef struct s_process
 {
 	t_deque	*envp;

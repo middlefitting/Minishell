@@ -20,7 +20,7 @@ void	print_error(const char *cmd, char *option, int flags)
 	tmp = str;
 	str = m_strjoin ("minishell: ", str);
 	free (tmp);
-	if (!option)
+	if (option)
 	{
 		tmp = str;
 		str = m_strjoin (str, ": ");

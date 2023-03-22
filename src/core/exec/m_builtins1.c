@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	m_echo(t_process *proc, t_deque *argv, int flag)
 {
 	t_token	*str;
@@ -22,7 +20,7 @@ void	m_echo(t_process *proc, t_deque *argv, int flag)
 		write (STDOUT_FILENO, "\n", 1);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
-	mexit (flag, mexit_status);
+	mexit (flag, g_exit_status);
 }
 
 t_token	*check_echo_option(t_deque *argv, int *option)
@@ -59,7 +57,7 @@ void	m_env(t_process *proc, int flag)
 	}
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
-	mexit (flag, mexit_status);
+	mexit (flag, g_exit_status);
 }
 
 void	m_cd(t_process *proc, int flag)
@@ -79,15 +77,7 @@ void	m_cd(t_process *proc, int flag)
 		path_error (path);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
-	if (flag)
-		exit (mexit_status);
-	else
-	{
-		cur_status = ft_strjoin ("?=", ft_itoa (mexit_status));
-		env_append (proc->envp, cur_status);
-		free (cur_status);
-	}
-	return ;
+	mexit (flag, g_exit_status);
 }
 
 void	m_pwd(t_process *proc, int flag)
@@ -100,8 +90,8 @@ void	m_pwd(t_process *proc, int flag)
 	if (path == NULL)
 	{
 		free (path);
-		mexit_status = 1;
-		mexit (flag, mexit_status);
+		g_exit_status = 1;
+		mexit (flag, g_exit_status);
 	}
 	while (path[i] != '\0')
 		write (STDOUT_FILENO, &path[i++], 1);
@@ -109,5 +99,5 @@ void	m_pwd(t_process *proc, int flag)
 	free (path);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
-	mexit (flag, mexit_status);
+	mexit (flag, g_exit_status);
 }

@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	check_redir(t_process *proc)
 {
 	t_redirects	*redirects;
@@ -58,7 +56,8 @@ void	check_file(t_process *proc, t_redirects *redirects, int fd)
 	{
 		print_error (redirects->redirect->file_name->content, 0, 0);
 		close_fds (proc, 1);
-		mexit_status = 1;
-		exit (1);
+		g_exit_status = 1;
+		if (proc->pid != 1)
+			exit (1);
 	}
 }

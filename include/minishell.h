@@ -13,4 +13,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <string.h>
+
+int	g_exit_status;
 #endif
