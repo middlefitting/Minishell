@@ -120,4 +120,7 @@ void	default_signal(void);
 void	set_herdoc_signal(pid_t pid);
 void	set_signal(pid_t pid);
 char	*get_env_name(char *raw);
+char	*get_env_content(char *raw);
+void	ft_unset(t_simple_cmd *simple_cmd, t_data *data)
+void	ft_export(t_simple_cmd *simple_cmd, t_data *data);
 #endif

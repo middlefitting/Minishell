@@ -85,6 +85,7 @@ void	renew_line(t_data *data, int s, int e, int *index, int quote_flag)
 	data->line = new_line;
 	if (env)
 		*index += (ft_strlen(env) + 1);
+	free(env);
 }
 
 void parse_env(t_data *data, int s, int *index, int quote_flag)

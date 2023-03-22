@@ -4,11 +4,13 @@ char	*get_env(t_deque *envs, char *name)
 {
 	t_token	*env;
 
+	if (ft_strcmp(name, "?") == 0)
+		ft_itoa(t_global_status);
 	env = envs->top;
 	while (env)
 	{
 		if (ft_strcmp(env->name, name) == 0)
-			return (env->content);
+			return (ft_strdup(env->content));
 		env = env->next;
 	}
 	return (0);
