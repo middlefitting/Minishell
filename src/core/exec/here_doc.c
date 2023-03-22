@@ -66,25 +66,10 @@ void	check_heredoc(t_process *proc, t_redirects *redirects)
 		{
 			fd = open (proc->heredoc_file[proc->fd_idx],
 					O_WRONLY | O_TRUNC | O_CREAT, 0644);
-			while (1)
-			{
-				str = readline ("> ");
-				if (!str)
-				{
-					free(str);
-					close(fd);
-					return ;
-				}
-				if (!ft_strcmp (redirects->redirect->file_name->content, str))
-				{
-					free (str);
-					close (fd);
-					break ;
-				}
-				write (fd, str, ft_strlen (str));
-				write (fd, "\n", 1);
-				free (str);
-			}
+			if (write_str(redirects->redirect->file_name->content, fd))
+				return;
+			else
+				break;
 		}
 		redirects = redirects->redirects;
 	}
@@ -94,6 +79,7 @@ void	mk_heredoc(t_process *proc)
 {
 	t_pipe	*pipe;
 
+	set_herdoc_signal(0);
 	pipe = proc->pipe;
 	while (pipe)
 	{

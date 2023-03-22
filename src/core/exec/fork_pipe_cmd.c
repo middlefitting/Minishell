@@ -1,5 +1,19 @@
 #include "exec.h"
 
+void	fork_and_pipe(t_process *proc, int flag)
+{
+	if (proc->num_of_pipe)
+		do_pipe (proc, proc->pipe);
+	if (do_fork (proc, proc->pipe))
+	{
+		if (flag)
+			exit (1);
+		else
+			return ;
+	}
+	do_cmds (proc);
+}
+
 void	do_pipe(t_process *proc, t_pipe *tree)
 {
 	int	i;
@@ -26,14 +40,13 @@ int	do_fork(t_process *proc, t_pipe *tree)
 			proc->pid = fork ();
 		else
 			return (0);
-		set_signal(proc->pid);
-		if (proc->pid == 0) //signal setting
+		if (proc->pid == 0)
 		{
 			proc->pipe = tmp;
 			proc->cmd = i + 2;
 		}
 		else if (proc->pid < 0)
-			exit (1);
+			return (1);
 		if (tmp != NULL)
 			tmp = tmp->pipe;
 		i++;
@@ -55,6 +68,7 @@ void	do_cmds(t_process *proc)
 
 void	do_cmd(t_process *proc)
 {
+	set_signal(proc->pid);
 	if (proc->num_of_pipe)
 		close_and_dup (proc);
 	if (proc->pipe->cmd->redirects != NULL)

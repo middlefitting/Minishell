@@ -57,3 +57,28 @@ size_t	m_strlcat(char *dst, const char *src, size_t dstsize)
 	dst[len_dst] = '\0';
 	return (len_dns);
 }
+
+int		write_str(char *content, int fd)
+{
+	char	*str;
+
+	while (1)
+	{
+		str = readline ("> ");
+		if (!str)
+		{
+			free(str);
+			close(fd);
+			return (1);
+		}
+		if (!ft_strcmp (content, str))
+		{
+			free (str);
+			close (fd);
+			return (0);
+		}
+		write (fd, str, ft_strlen (str));
+		write (fd, "\n", 1);
+		free (str);
+	}
+}

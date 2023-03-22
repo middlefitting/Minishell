@@ -4,13 +4,16 @@ void	path_error(char *path, char *home)
 {
 	struct stat	file;
 
-	if (!home)
+	if (!path && !home)
 		print_error ("cd", path, 4);
 	else if (stat(path, &file) == ERROR)
+	{
 		if (errno == ENOENT)
 			print_error ("cd", path, 0);
+	}
 	else if ((file.st_mode & S_IFMT) != S_IFDIR)
 		print_error ("cd", path, 3);
+	g_exit_status = 1;
 }
 
 void	print_error(const char *cmd, char *option, int flags)

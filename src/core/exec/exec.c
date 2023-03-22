@@ -5,13 +5,14 @@ void	exec(t_pipe *tree, t_deque *envp)
 	t_process	*proc;
 
 	proc = init_proc (tree, envp);
-	mk_heredoc (proc);
-	if (!proc->num_of_pipe)
+	is_heredoc(proc);
+	if (!proc->num_of_pipe && !proc->heredoc_flag)
 		if (check_isbuiltins(proc))
 			return ;
-	if (proc->num_of_pipe)
-		do_pipe (proc, tree);
-	do_fork (proc, tree);//fork 실패시 예외처리 필요
+	if (proc->heredoc_flag)
+		if(heredoc_fork (proc))
+			return ;
+	fork_and_pipe (proc, 0);
 	do_cmds (proc);
 	free_proc (proc);
 }
@@ -26,6 +27,7 @@ t_process	*init_proc(t_pipe *tree, t_deque *envp)
 	tmp->pid = 1;
 	tmp->pipe = tree;
 	tmp->num_of_pipe = get_pipe_size (tree);
+	tmp->heredoc_flag = 0;
 	tmp->fd_idx = 0;
 	tmp->cmd = 0;
 	tmp->envp = envp;
@@ -42,22 +44,17 @@ t_process	*init_proc(t_pipe *tree, t_deque *envp)
 void	exit_proc(t_process *proc)
 {
 	pid_t	pid;
-	char	*cur_status;
 	int		status;
 	int		i;
 
 	i = 0;
 	while (i <= proc->num_of_pipe)
 	{
-		status = 0;
 		pid = wait (&status);
-		if (pid > 0)
+		if (pid > 0 || pid == -1)
 			i++;
 		if (proc->pid == pid)
-		{
-			ft_putnbr_fd(WEXITSTATUS(status), 1);
 			g_exit_status = WEXITSTATUS(status);
-		}
 		if (WIFSIGNALED(status))
 		{
 			g_exit_status = 128 + WTERMSIG (status);
