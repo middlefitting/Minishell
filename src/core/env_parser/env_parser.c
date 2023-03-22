@@ -20,7 +20,6 @@ char	*substr_env(t_data *data, int s, int e)
 {
 	char	*name;
 	char	*env;
-
 	name = 0;
 	while (!name)
 		name = ft_substr(data->line, s + 1, e - s - 1);
@@ -112,7 +111,6 @@ int	env_parser(t_data *data)
 {
 	int	i;
 	int quote_flag;
-
 	i = 0;
 	quote_flag = 0;
 	while (data->line[i])

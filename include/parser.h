@@ -112,7 +112,7 @@ int		renew_quote_flag(int flag, char c);
 char	*join_line(char *dest, char *s);
 void	remove_env(t_deque *envs, char *name);
 char	**get_envs_pointer(t_deque *envs);
-char	**free_envs_pointer(char **envs);
+void	free_envs_pointer(char **envs);
 void	free_data(t_data *data);
 int		get_pipe_size(t_pipe *pipe);
 void	init_data(t_data *data);
@@ -121,6 +121,8 @@ void	set_herdoc_signal(pid_t pid);
 void	set_signal(pid_t pid);
 char	*get_env_name(char *raw);
 char	*get_env_content(char *raw);
-void	ft_unset(t_simple_cmd *simple_cmd, t_data *data)
-void	ft_export(t_simple_cmd *simple_cmd, t_data *data);
+void	ft_unset(t_simple_cmd *simple_cmd, t_deque *envs);
+void	ft_export(t_simple_cmd *simple_cmd, t_deque *d_envs);
+void	child_signal_handler(int signo);
+void	new_prompt_handler(int signo);
 #endif

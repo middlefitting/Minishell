@@ -1,16 +1,29 @@
 #include "parser.h"
+#include "exec.h"
 
 char	*get_env(t_deque *envs, char *name)
 {
 	t_token	*env;
+	char	*result;
 
+	result = 0;
 	if (ft_strcmp(name, "?") == 0)
-		ft_itoa(t_global_status);
+	{
+		while (!result)
+			result = ft_itoa(g_exit_status);
+		return (result);
+	}
 	env = envs->top;
 	while (env)
 	{
 		if (ft_strcmp(env->name, name) == 0)
-			return (ft_strdup(env->content));
+		{
+			if (!env->content)
+				return (0);
+			while (!result)
+				result = ft_strdup(env->content);
+			return (result);
+		}
 		env = env->next;
 	}
 	return (0);
@@ -65,7 +78,7 @@ char	**get_envs_pointer(t_deque *envs)
 	return (envs_pointer);
 }
 
-char	**free_envs_pointer(char **envs)
+void	free_envs_pointer(char **envs)
 {
 	int	i;
 

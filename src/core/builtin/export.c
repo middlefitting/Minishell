@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "minishell.h"
+#include "exec.h"
 
 void	envs_sort(char **envs)
 {
@@ -31,13 +31,13 @@ void	envs_sort(char **envs)
 	}
 }
 
-void	print_export(t_data *data, int i)
+void	print_export(t_deque *d_envs, int i)
 {
 	char	**envs;
 	char	*name;
 	char	*content;
 
-	envs = get_envs_pointer(data->envs);
+	envs = get_envs_pointer(d_envs);
 	envs_sort(envs);
 	while (envs[i])
 	{
@@ -57,6 +57,7 @@ void	print_export(t_data *data, int i)
 		free(content);
 		i++;
 	}
+	free_envs_pointer(envs);
 }
 
 int	env_name_check(char *name)
@@ -79,13 +80,13 @@ int	env_name_check(char *name)
 	return(1);
 }
 
-void	export_env(t_data *data, t_token *token, int *flag)
+void	export_env(t_deque *d_envs, t_token *token, int *flag)
 {
 	char	*name;
 
 	name = get_env_name(token->content);
 	if(env_name_check(name) == 1)
-		env_append(data->envs, token->content);
+		env_append(d_envs, token->content);
 	else if (env_name_check(name) == 0)
 	{
 		*flag = 1;
@@ -94,7 +95,7 @@ void	export_env(t_data *data, t_token *token, int *flag)
 	free(name);
 }
 
-void	ft_export(t_simple_cmd *simple_cmd, t_data *data)
+void	ft_export(t_simple_cmd *simple_cmd, t_deque *d_envs)
 {
 	int		flag;
 	t_token	*temp;
@@ -103,20 +104,20 @@ void	ft_export(t_simple_cmd *simple_cmd, t_data *data)
 	if (!simple_cmd)
 		return ;
 	if (simple_cmd->argv->size == 1)
-		print_export(data, 0);
+		print_export(d_envs, 0);
 	else
 	{
 		temp = simple_cmd->argv->top->next;
 		while (temp)
 		{
-			export_env(data, temp, &flag);
+			export_env(d_envs, temp, &flag);
 			temp = temp->next;
 		}
 	}
 	g_exit_status = flag;
 }
 
-void	ft_unset(t_simple_cmd *simple_cmd, t_data *data)
+void	ft_unset(t_simple_cmd *simple_cmd, t_deque *envs)
 {
 	char 	*name;
 	t_token *temp;
@@ -130,7 +131,7 @@ void	ft_unset(t_simple_cmd *simple_cmd, t_data *data)
 	{
 		name = get_env_name(temp->content);
 		if (env_name_check(name) == 1)
-			remove_env(data->envs, name);
+			remove_env(envs, name);
 		if (env_name_check(name) == 0)
 		{
 			flag = 1;

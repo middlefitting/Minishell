@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sechung <sechung@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 20:41:56 by sechung           #+#    #+#             */
-/*   Updated: 2022/07/07 17:04:57 by sechung          ###   ########.fr       */
+/*   Updated: 2023/03/22 20:30:30 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 char	*ft_strdup(const char *s)
@@ -26,7 +27,7 @@ char	*ft_strdup(const char *s)
 	{
 		copy[i] = s[i];
 		i++;
-	}	
+	}
 	copy[i] = 0;
 	return (copy);
 }

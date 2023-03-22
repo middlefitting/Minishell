@@ -99,4 +99,5 @@ void	env_init(t_data *data, char **envp)
 		write(1, "\n", 1);
 		s++;
 	}
+	free_envs_pointer(p);
 }

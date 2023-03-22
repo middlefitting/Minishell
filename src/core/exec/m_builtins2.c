@@ -29,10 +29,10 @@ void	do_builtins(t_process *proc, int flag)
 		m_cd(proc, flag);
 	else if (!ft_strcmp ("pwd", cmd))
 		m_pwd(proc, flag);
-	// else if (!ft_strcmp ("export", cmd))
-	// 	m_export(proc, flag);
-	// else if (!ft_strcmp ("unset", cmd))
-	// 	m_unset(proc, flag);
+	else if (!ft_strcmp ("export", cmd))
+		ft_export(proc->pipe->cmd->simple_cmd, proc->envp);
+	else if (!ft_strcmp ("unset", cmd))
+		ft_unset(proc->pipe->cmd->simple_cmd, proc->envp); //m_unset(proc, flag);
 	else if (!ft_strcmp ("env", cmd))
 		m_env(proc, flag);
 	else if (!ft_strcmp ("exit", cmd))

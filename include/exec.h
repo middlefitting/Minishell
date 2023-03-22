@@ -77,7 +77,7 @@ void		m_pwd(t_process *proc, int flag);
 void		m_export(t_process *proc, int flag);
 void		m_unset(t_process *proc, int flag);
 void		m_env(t_process *proc, int flag);
-void		path_error(char *path);
+void		path_error(char *path, char *home);
 void		mexit(int flag, int mexit_status);
 void		recover_std(t_process *proc);
 void		save_std(t_process *proc);

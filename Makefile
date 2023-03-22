@@ -36,7 +36,8 @@ SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/exec/make_path.c \
 				$(SRCDIR)/core/exec/free.c \
 				$(SRCDIR)/core/signal/signal.c \
-				$(SRCDIR)/core/exec/print_error.c
+				$(SRCDIR)/core/exec/print_error.c \
+				$(SRCDIR)/core/builtin/export.c
 OBJS		=	${SRCS:.c=.o}
 
 all :

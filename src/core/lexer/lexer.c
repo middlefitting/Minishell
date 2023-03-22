@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "exec.h"
 
 void print_parse_error(char *msg)
 {
@@ -439,7 +440,7 @@ int	parse(t_data *data)
 		lexer(data) &&
 		parser(data))
 		return (1);
-	env_append(data->envs, "?=258");
+	g_exit_status = 258;
 	return (0);
 }
 
