@@ -40,5 +40,6 @@ void	ft_exit(t_simple_cmd *simple_cmd)
 		print_exit_error_digit(simple_cmd->argv->top->next->content);
 		exit(255);
 	}
+	ft_putendl_fd("exit", 1);
 	exit(0);
 }

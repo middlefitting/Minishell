@@ -20,15 +20,6 @@ void	eof_check(char *str)
 	}
 }
 
-void	exit_check(char *str)
-{
-	if (!ft_strcmp (str, "exit"))
-	{
-		write (1, "exit\n", 5);
-		exit (0);
-	}
-}
-
 int main (int argc, char *argv[], char **envp)
 {
 	struct termios t;
@@ -52,7 +43,6 @@ int main (int argc, char *argv[], char **envp)
 		eof_check(data.line);
 		if (ft_strcmp(data.line , ""))
 			add_history (data.line);
-		// exit_check(data.line);
 		if (parse(&data))
 			exec (data.tree, data.envs);
 		free_data(&data);
