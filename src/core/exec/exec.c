@@ -60,13 +60,11 @@ void	exit_proc(t_process *proc)
 		if (proc->pid == pid)
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-		{
 			g_exit_status = 128 + WTERMSIG (status);
-			if (WTERMSIG (status) == 2)
-				ft_putendl_fd("", STDERR_FILENO);
-			else if (WTERMSIG (status) == 3)
-				ft_putendl_fd("Quit: 3", STDOUT_FILENO);
-		}
 	}
+	if (WTERMSIG (status) == 2)
+		ft_putendl_fd("", STDERR_FILENO);
+	else if (WTERMSIG (status) == 3)
+		ft_putendl_fd("Quit: 3", STDOUT_FILENO);
 	rm_heredoc ();
 }
