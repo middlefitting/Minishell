@@ -53,16 +53,11 @@ void	m_cd(t_process *proc, int flag)
 	int		error;
 
 	home = get_env (proc->envp, "HOME");
+	error = 0;
+	path = 0;
 	if (proc->pipe->cmd->simple_cmd->argv->top->next)
 		path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
-	if (path == NULL && home != NULL)
-		error = chdir (home);
-	else
-		error = chdir (path);
-	if (error == ERROR && (home == NULL || path == NULL))
-		path_error (path, home);
-	else
-		g_exit_status = 0;
+	check_patherror (0, path, home);
 	path = getcwd (NULL, 0);
 	temp = ft_strjoin("PWD=", path);
 	env_append(proc->envp, temp);
@@ -72,6 +67,21 @@ void	m_cd(t_process *proc, int flag)
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
 	mexit (flag, g_exit_status);
+}
+
+void	check_patherror(int error, char *path, char *home)
+{
+	if (path == NULL && home != NULL)
+		error = chdir (home);
+	else if (path == NULL && home == NULL)
+		error = 1;
+	else
+		error = chdir (path);
+	if (error)
+		path_error (path, home);
+	else
+		g_exit_status = 0;
+	return ;
 }
 
 void	m_pwd(t_process *proc, int flag)

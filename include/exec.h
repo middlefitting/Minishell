@@ -87,6 +87,7 @@ void		path_error(char *path, char *home);
 void		mexit(int flag, int mexit_status);
 void		recover_std(t_process *proc);
 void		save_std(t_process *proc);
+void		check_patherror(int error, char *path, char *home);
 //--------------------------  free.c
 void		free_proc(t_process *proc);
 void		free_all(char **str);
