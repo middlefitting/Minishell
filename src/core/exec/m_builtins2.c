@@ -38,7 +38,7 @@ void	do_builtins(t_process *proc, int flag)
 	else if (!ft_strcmp ("env", cmd))
 		m_env(proc, flag);
 	else if (!ft_strcmp ("exit", cmd))
-		exit (0);
+		ft_exit(proc->pipe->cmd->simple_cmd);
 	if (flag)
 		exit (g_exit_status);
 	else
