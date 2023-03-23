@@ -3,8 +3,8 @@
 void	fork_and_pipe(t_process *proc, int flag)
 {
 	if (proc->num_of_pipe)
-		do_pipe (proc, proc->pipe);
-	if (do_fork (proc, proc->pipe))
+		do_pipe (proc);
+	if (do_fork (proc, 0))
 	{
 		if (flag)
 			exit (1);
@@ -14,7 +14,7 @@ void	fork_and_pipe(t_process *proc, int flag)
 	do_cmds (proc);
 }
 
-void	do_pipe(t_process *proc, t_pipe *tree)
+void	do_pipe(t_process *proc)
 {
 	int	i;
 
@@ -27,9 +27,8 @@ void	do_pipe(t_process *proc, t_pipe *tree)
 	}
 }
 
-int	do_fork(t_process *proc, t_pipe *tree)
+int	do_fork(t_process *proc, t_pipe *tmp)
 {
-	t_pipe	*tmp;
 	int		i;
 
 	tmp = proc->pipe;
@@ -46,7 +45,10 @@ int	do_fork(t_process *proc, t_pipe *tree)
 			proc->cmd = i + 2;
 		}
 		else if (proc->pid < 0)
+		{
+			fork_error ();
 			return (1);
+		}
 		if (tmp != NULL)
 			tmp = tmp->pipe;
 		i++;

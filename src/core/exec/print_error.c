@@ -1,11 +1,13 @@
 #include "exec.h"
 
-void	path_error(char *path, char *home)
+void	path_error(char *path, char *home, int opt_flag)
 {
 	struct stat	file;
 
-	if (!path && !home)
+	if (!path && !home && opt_flag == 1)
 		print_error ("cd", path, 4);
+	else if (!path && !home && opt_flag == 2)
+		print_error ("cd", path, 5);
 	else if (stat(path, &file) == ERROR)
 	{
 		if (errno == ENOENT)
@@ -52,6 +54,8 @@ void	print_errortype(char *str, int flags)
 		str = m_strjoin (str, ": Not a directory\n");
 	else if (flags == 4)
 		str = m_strjoin (str, ": HOME not set\n");
+	else if (flags == 5)
+		str = m_strjoin (str, ": OLDPWD not set\n");
 	free (tmp);
 	write (2, str, ft_strlen (str));
 	free (str);
