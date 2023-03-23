@@ -28,8 +28,8 @@ typedef struct s_process
 
 void		exec(t_pipe *tree, t_deque *envp);
 t_process	*init_proc(t_pipe *tree, t_deque *envp);
-void		do_pipe(t_process *proc, t_pipe *tree);
-int			do_fork(t_process *proc, t_pipe *tree);
+void		do_pipe(t_process *proc);
+int			do_fork(t_process *proc, t_pipe *tmp);
 void		do_cmds(t_process *proc);
 void		do_cmd(t_process *proc);
 void		exit_proc(t_process *proc);
@@ -74,6 +74,7 @@ t_token		*check_echo_option(t_deque *argv, int *option);
 void		print_error(const char *cmd, char *option, int flags);
 void		print_errortype(char *str, int flags);
 int			heredoc_fork(t_process *proc);
+void		fork_error(void);
 //--------------------------  m_builtins 1 & 2.c
 int			check_isbuiltins(t_process *proc);
 void		m_echo(t_process *proc, t_deque *argv, int flag);
@@ -83,11 +84,13 @@ void		m_export(t_process *proc, int flag);
 void		m_unset(t_process *proc, int flag);
 void		m_env(t_process *proc, int flag);
 void		write_env(t_token *env, int env_flag);
-void		path_error(char *path, char *home);
+void		path_error(char *path, char *home, int opt_flag);
 void		mexit(int flag, int mexit_status);
 void		recover_std(t_process *proc);
 void		save_std(t_process *proc);
-void		check_patherror(int error, char *path, char *home);
+void		update_pwd(t_process *proc, char *tmp);
+void		check_patherror(char *path, char *home, int opt_flag);
+char		*check_cdopt(t_process *proc, char *path, int *opt_flag);
 //--------------------------  free.c
 void		free_proc(t_process *proc);
 void		free_all(char **str);

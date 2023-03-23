@@ -48,37 +48,82 @@ void	do_builtins(t_process *proc, int flag)
 void	m_cd(t_process *proc, int flag)
 {
 	char	*path;
-	char	*home;
-	char	*temp;
-	int		error;
+	char	*tmp;
+	int		opt_flag;
 
-	home = get_env (proc->envp, "HOME");
-	error = 0;
+
 	path = 0;
 	if (proc->pipe->cmd->simple_cmd->argv->top->next)
 		path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
-	check_patherror (0, path, home);
-	path = getcwd (NULL, 0);
-	temp = ft_strjoin("PWD=", path);
-	env_append(proc->envp, temp);
-	free(path);
-	free(temp);
-	free(home);
+	path = check_cdopt (proc, path, &opt_flag);
+	tmp = getcwd (NULL, 0);
+	check_patherror (path, path, opt_flag);
+	update_pwd (proc, tmp);
+	if (path)
+		free (path);
 	if (proc->num_of_pipe == 0)
 		recover_std (proc);
 	mexit (flag, g_exit_status);
 }
 
-void	check_patherror(int error, char *path, char *home)
+void	update_pwd(t_process *proc, char *tmp)
 {
-	if (path == NULL && home != NULL)
-		error = chdir (home);
-	else if (path == NULL && home == NULL)
+	char	*path;
+
+	path = ft_strjoin ("OLDPWD=", tmp);
+	if (tmp)
+		free (tmp);
+	env_append(proc->envp, path);
+	free (path);
+	tmp = getcwd (NULL, 0);
+	path = ft_strjoin ("PWD=", tmp);
+	env_append(proc->envp, path);
+	if (path)
+		free(path);
+	if (tmp)
+		free(tmp);
+}
+
+char	*check_cdopt(t_process *proc, char *path, int *opt_flag)
+{
+	if (path == NULL || !ft_strcmp (path, "~"))
+	{
+		*opt_flag = 1;
+		return (get_env (proc->envp, "HOME"));
+	}
+	else if (!ft_strcmp (path, "-"))
+	{
+		*opt_flag = 2;
+		return (get_env (proc->envp, "OLDPWD"));
+	}
+	else
+	{
+		*opt_flag = 0;
+		return (ft_strdup (path));
+	}
+}
+
+void	check_patherror(char *path, char *home, int opt_flag)
+{
+	int	error;
+	int	i;
+
+	error = 0;
+	i = 0;
+	if (path == NULL && home == NULL)
 		error = 1;
 	else
+	{
 		error = chdir (path);
+		if (error != 1 && opt_flag == 2)
+		{
+			while (path[i])
+				write (1, &path[i++], 1);
+			write (1, "\n", 1);
+		}
+	}
 	if (error)
-		path_error (path, home);
+		path_error (path, home, opt_flag);
 	else
 		g_exit_status = 0;
 	return ;
