@@ -70,4 +70,5 @@ void	fork_error(void)
 		write (1, "minishell: fork: Resource temporarily unavailable\n", 50);
 	while (wait(NULL) != -1)
 		;
+	g_exit_status = 1;
 }
