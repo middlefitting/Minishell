@@ -1,21 +1,5 @@
 #include "parser.h"
 
-char	*join_line(char *dest, char *s)
-{
-	char	*new_line;
-	char	*merge_line;
-
-	new_line = 0;
-	merge_line = 0;
-	while (!merge_line)
-		merge_line = ft_strdup(s);
-	while (!new_line)
-		new_line = ft_strjoin(dest, merge_line);
-	free(dest);
-	free(merge_line);
-	return (new_line);
-}
-
 char	*substr_env(t_data *data, int s, int e)
 {
 	char	*name;
@@ -30,14 +14,11 @@ char	*substr_env(t_data *data, int s, int e)
 
 int		get_pre_token_type(t_data *data, int *index, int quote_flag)
 {
-	// int	quote_flag;
 	int i;
 	int	white_flag;
 
 	i = *index;
-	// quote_flag = 0;
 	white_flag = 0;
-
 	while ((i >= 0) &&
 			((quote_flag != 0) ||
 			(data->line[i] != '|' &&
@@ -93,15 +74,24 @@ void parse_env(t_data *data, int s, int *index, int quote_flag)
 	char	*env;
 
 	e = s + 1;
-	while (data->line[e] &&
-			data->line[e] != '\'' &&
-			data->line[e] != '\"' &&
-			data->line[e] != '|' &&
-			data->line[e] != '<' &&
-			data->line[e] != '>' &&
-			data->line[e] != '$' &&
-			!white_space(data->line[e]))
+	if (data->line[e] == '?')
 		e++;
+	else
+	{
+		while (data->line[e] &&
+				(ft_isalpha(data->line[s + 1]) || data->line[s + 1] == '_') &&
+				(ft_isalnum(data->line[e]) || data->line[e] == '_')
+				// &&
+				// data->line[e] != '\'' &&
+				// data->line[e] != '\"' &&
+				// data->line[e] != '|' &&
+				// data->line[e] != '<' &&
+				// data->line[e] != '>' &&
+				// data->line[e] != '$' &&
+				// !white_space(data->line[e])
+				)
+			e++;
+	}
 	if ((e - s) == 1)
 		return;
 	renew_line(data, s, e, index, quote_flag);
