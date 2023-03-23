@@ -1,7 +1,5 @@
 #include "exec.h"
 
-extern int	mexit_status;
-
 void	make_path(t_process *proc)
 {
 	char	**execve_option;

@@ -17,6 +17,7 @@ typedef struct s_process
 	t_pipe	*pipe;
 	pid_t	pid;
 	char	**heredoc_file;
+	int		heredoc_flag;
 	int		num_of_pipe;
 	int		fd_idx;
 	int		**fds;
@@ -33,6 +34,7 @@ void		do_cmds(t_process *proc);
 void		do_cmd(t_process *proc);
 void		exit_proc(t_process *proc);
 void		do_builtins(t_process *proc, int flag);
+void		fork_and_pipe(t_process *proc, int flag);
 //--------------------------  check_redir.c
 void		check_redir(t_process *proc);
 void		check_infile(t_process *proc, t_redirects *redirects,
@@ -42,9 +44,11 @@ void		check_file(t_process *proc, t_redirects *redirects, int fd);
 //--------------------------  here_doc.c
 void		mk_heredoc(t_process *proc);
 void		check_heredoc(t_process *proc, t_redirects *redirects);
+int			write_str(char *content, int fd);
 void		mk_num(char *str, int num);
 char		*mk_filename(void);
 void		rm_heredoc(void);
+void		is_heredoc(t_process *proc);
 //--------------------------  close.c
 void		close_and_dup(t_process *proc);
 void		close_fds(t_process *proc, int check_parent);
@@ -69,6 +73,7 @@ size_t		m_strlcat(char *dst, const char *src, size_t dstsize);
 t_token		*check_echo_option(t_deque *argv, int *option);
 void		print_error(const char *cmd, char *option, int flags);
 void		print_errortype(char *str, int flags);
+int			heredoc_fork(t_process *proc);
 //--------------------------  m_builtins 1 & 2.c
 int			check_isbuiltins(t_process *proc);
 void		m_echo(t_process *proc, t_deque *argv, int flag);

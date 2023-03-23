@@ -32,9 +32,13 @@ void	do_builtins(t_process *proc, int flag)
 	else if (!ft_strcmp ("export", cmd))
 		ft_export(proc->pipe->cmd->simple_cmd, proc->envp);
 	else if (!ft_strcmp ("unset", cmd))
-		ft_unset(proc->pipe->cmd->simple_cmd, proc->envp); //m_unset(proc, flag);
+		ft_unset(proc->pipe->cmd->simple_cmd, proc->envp);
 	else if (!ft_strcmp ("env", cmd))
 		m_env(proc, flag);
 	else if (!ft_strcmp ("exit", cmd))
 		exit (0);
+	if (flag)
+		exit (g_exit_status);
+	else
+		return ;
 }

@@ -64,8 +64,8 @@ void	m_cd(t_process *proc, int flag)
 {
 	char	*path;
 	char	*home;
-	int		error;
 	char	*temp;
+	int		error;
 
 	home = get_env (proc->envp, "HOME");
 	path = 0;
@@ -73,10 +73,12 @@ void	m_cd(t_process *proc, int flag)
 		path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
 	if (path == NULL && home != NULL)
 		error = chdir (home);
-	else if (path != NULL)
+	else
 		error = chdir (path);
-	if (error == ERROR || home == NULL)
+	if (error == ERROR && (home == NULL || path == NULL))
 		path_error (path, home);
+	else
+		g_exit_status = 0;
 	path = getcwd (NULL, 0);
 	temp = ft_strjoin("PWD=", path);
 	env_append(proc->envp, temp);

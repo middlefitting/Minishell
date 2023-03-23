@@ -17,7 +17,7 @@ void	child_signal_handler(int signo)
 {
 	// write(1, "cc\n", 3);
 	// if (signo == SIGINT)
-	// 	ft_putendl_fd("", STDERR_FILENO);
+	// ft_putendl_fd("", STDERR_FILENO);
 	// if (signo == SIGQUIT)
 	// 	ft_putendl_fd("Quit: 3", STDOUT_FILENO);
 	exit(1);
