@@ -58,7 +58,7 @@ size_t	m_strlcat(char *dst, const char *src, size_t dstsize)
 	return (len_dns);
 }
 
-int		write_str(char *content, int fd)
+int	write_str(char *content, int fd)
 {
 	char	*str;
 

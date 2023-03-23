@@ -68,7 +68,6 @@ void	do_cmds(t_process *proc)
 
 void	do_cmd(t_process *proc)
 {
-	set_signal(proc->pid);
 	if (proc->num_of_pipe)
 		close_and_dup (proc);
 	if (proc->pipe->cmd->redirects != NULL)

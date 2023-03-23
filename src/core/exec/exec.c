@@ -10,10 +10,14 @@ void	exec(t_pipe *tree, t_deque *envp)
 		if (check_isbuiltins(proc))
 			return ;
 	if (proc->heredoc_flag)
-		if(heredoc_fork (proc))
+	{
+		if (heredoc_fork (proc))
+		{
+			free_proc (proc);
 			return ;
+		}
+	}
 	fork_and_pipe (proc, 0);
-	do_cmds (proc);
 	free_proc (proc);
 }
 
@@ -56,13 +60,11 @@ void	exit_proc(t_process *proc)
 		if (proc->pid == pid)
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-		{
 			g_exit_status = 128 + WTERMSIG (status);
-			if (WTERMSIG (status) == 2)
-				ft_putendl_fd("", STDERR_FILENO);
-			else if (WTERMSIG (status) == 3)
-				ft_putendl_fd("Quit: 3", STDOUT_FILENO);
-		}
 	}
+	if (WTERMSIG (status) == 2)
+		ft_putendl_fd("", STDERR_FILENO);
+	else if (WTERMSIG (status) == 3)
+		ft_putendl_fd("Quit: 3", STDOUT_FILENO);
 	rm_heredoc ();
 }
