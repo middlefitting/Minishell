@@ -7,6 +7,7 @@ void	make_path(t_process *proc)
 	char	*cmd;
 	int		i;
 
+	set_signal(proc->pid);
 	execve_option = get_option (proc);
 	cmd = proc->pipe->cmd->simple_cmd->file_path->content;
 	i = 0;

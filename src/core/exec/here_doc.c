@@ -53,6 +53,7 @@ void	rm_heredoc(void)
 		if (!exist)
 			unlink (str);
 	}
+	free (str);
 }
 
 void	check_heredoc(t_process *proc, t_redirects *redirects)
@@ -67,9 +68,9 @@ void	check_heredoc(t_process *proc, t_redirects *redirects)
 			fd = open (proc->heredoc_file[proc->fd_idx],
 					O_WRONLY | O_TRUNC | O_CREAT, 0644);
 			if (write_str(redirects->redirect->file_name->content, fd))
-				return;
+				return ;
 			else
-				break;
+				break ;
 		}
 		redirects = redirects->redirects;
 	}
@@ -79,7 +80,7 @@ void	mk_heredoc(t_process *proc)
 {
 	t_pipe	*pipe;
 
-	set_herdoc_signal(0);
+	set_herdoc_signal (0);
 	pipe = proc->pipe;
 	while (pipe)
 	{

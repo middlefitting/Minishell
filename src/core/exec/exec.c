@@ -10,10 +10,14 @@ void	exec(t_pipe *tree, t_deque *envp)
 		if (check_isbuiltins(proc))
 			return ;
 	if (proc->heredoc_flag)
-		if(heredoc_fork (proc))
+	{
+		if (heredoc_fork (proc))
+		{
+			free_proc (proc);
 			return ;
+		}
+	}
 	fork_and_pipe (proc, 0);
-	do_cmds (proc);
 	free_proc (proc);
 }
 
