@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   init_lexer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 19:57:43 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/23 19:58:06 by sechung          ###   ########.fr       */
+/*   Created: 2023/03/23 19:48:23 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:18:08 by sechung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	init_lexer(t_lexer *lexer)
 {
-	size_t	i;
-
-	i = 0;
-	if (s1 == s2)
-		return (0);
-	while (s1[i] && s1[i] == s2[i])
-		i++;
-	return ((unsigned char) s1[i] - (unsigned char) s2[i]);
+	lexer->index = 0;
+	lexer->quote_flag = 0;
+	lexer->token = 0;
+	lexer->token_flag = 0;
+	lexer->tokens = 0;
+	lexer->tokens = get_deque();
 }

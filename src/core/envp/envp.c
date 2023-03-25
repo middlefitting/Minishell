@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:34:49 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:17 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	env_update(t_token *env, char *name, char *content)
 {
@@ -37,7 +49,7 @@ char	*get_env_content(char *raw)
 
 void	env_append(t_deque *envs, char *raw)
 {
-	t_token *temp;
+	t_token	*temp;
 	t_token	*env;
 	char	*name;
 	char	*content;
@@ -59,7 +71,7 @@ void	env_append(t_deque *envs, char *raw)
 
 void	env_init(t_data *data, char **envp)
 {
-	int 	i;
+	int	i;
 
 	i = 0;
 	data->envs = get_deque();
@@ -68,36 +80,4 @@ void	env_init(t_data *data, char **envp)
 		env_append(data->envs, envp[i]);
 		i++;
 	}
-	env_append(data->envs, "?=0");
-	///env_print_logic///
-	t_token *token = data->envs->top;
-	while (token)
-	{
-		printf("[%s] : [%s]\n", token->name, token->content);
-		token = token->next;
-	}
-	/////////////////
-	char **p = get_envs_pointer(data->envs);
-	int s = 0;
-	while (p[s])
-	{
-		ft_putstr_fd(p[s], 1);
-		write(1, "\n", 1);
-		s++;
-	}
-	free_envs_pointer(p);
-	env_append(data->envs, "??");
-	// env_append(data->envs, "??=");
-	// env_append(data->envs, "??=");
-	ft_putstr_fd(data->envs->bottom->name, 1);
-	write(1, "\n", 1);
-	p = get_envs_pointer(data->envs);
-	s = 0;
-	while (p[s])
-	{
-		ft_putstr_fd(p[s], 1);
-		write(1, "\n", 1);
-		s++;
-	}
-	free_envs_pointer(p);
 }

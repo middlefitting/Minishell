@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   print_parse_error.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 19:57:43 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/23 19:58:06 by sechung          ###   ########.fr       */
+/*   Created: 2023/03/23 19:53:55 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:19:02 by sechung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	print_parse_error(char *msg)
 {
-	size_t	i;
+	ft_putstr_fd("minishell: parse error by ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
+}
 
-	i = 0;
-	if (s1 == s2)
-		return (0);
-	while (s1[i] && s1[i] == s2[i])
-		i++;
-	return ((unsigned char) s1[i] - (unsigned char) s2[i]);
+void	print_syntax_error(char *msg)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("'\n", 2);
 }

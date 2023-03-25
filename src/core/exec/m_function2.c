@@ -1,4 +1,16 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   m_function2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:38:16 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/25 13:48:19 by ahkiler          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 char	*m_strjoin(char const *s1, char const *s2)
 {
@@ -69,16 +81,27 @@ int	write_str(char *content, int fd)
 		{
 			free(str);
 			close(fd);
+			g_exit_status = 0;
 			return (1);
 		}
 		if (!ft_strcmp (content, str))
 		{
 			free (str);
 			close (fd);
+			g_exit_status = 0;
 			return (0);
 		}
 		write (fd, str, ft_strlen (str));
 		write (fd, "\n", 1);
 		free (str);
 	}
+}
+
+void	fork_error(void)
+{
+	if (errno == EAGAIN)
+		write (1, "minishell: fork: Resource temporarily unavailable\n", 50);
+	while (wait(NULL) != -1)
+		;
+	g_exit_status = 1;
 }

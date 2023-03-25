@@ -1,5 +1,16 @@
-#include "parser.h"
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:19:55 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:16:56 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	envs_sort(char **envs)
 {
@@ -9,8 +20,8 @@ void	envs_sort(char **envs)
 	int		i;
 	int		j;
 
-	i = 0;
-	while (envs[i])
+	i = -1;
+	while (envs[++i])
 	{
 		j = i + 1;
 		while (envs[j])
@@ -27,7 +38,6 @@ void	envs_sort(char **envs)
 			free(next);
 			j++;
 		}
-		i++;
 	}
 }
 
@@ -47,8 +57,7 @@ void	print_export(t_deque *d_envs, int i)
 		ft_putstr_fd(name, 1);
 		if (content)
 		{
-			ft_putstr_fd("=", 1);
-			ft_putstr_fd("\"", 1);
+			ft_putstr_fd("=\"", 1);
 			ft_putstr_fd(content, 1);
 			ft_putstr_fd("\"", 1);
 		}
@@ -74,10 +83,10 @@ int	env_name_check(char *name)
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return(0);
+			return (0);
 		i++;
 	}
-	return(1);
+	return (1);
 }
 
 void	export_env(t_deque *d_envs, t_token *token, int *flag)
@@ -85,7 +94,7 @@ void	export_env(t_deque *d_envs, t_token *token, int *flag)
 	char	*name;
 
 	name = get_env_name(token->content);
-	if(env_name_check(name) == 1)
+	if (env_name_check(name) == 1)
 		env_append(d_envs, token->content);
 	else if (env_name_check(name) == 0)
 	{
@@ -101,8 +110,6 @@ void	ft_export(t_simple_cmd *simple_cmd, t_deque *d_envs)
 	t_token	*temp;
 
 	flag = 0;
-	if (!simple_cmd)
-		return ;
 	if (simple_cmd->argv->size == 1)
 		print_export(d_envs, 0);
 	else
@@ -114,32 +121,5 @@ void	ft_export(t_simple_cmd *simple_cmd, t_deque *d_envs)
 			temp = temp->next;
 		}
 	}
-	g_exit_status = flag;
-}
-
-void	ft_unset(t_simple_cmd *simple_cmd, t_deque *envs)
-{
-	char 	*name;
-	t_token *temp;
-	int		flag;
-
-	flag = 0;
-	if (simple_cmd->argv->size == 1 || simple_cmd->argv->size == 0)
-		return ;
-	temp = simple_cmd->argv->top->next;
-	while(temp)
-	{
-		name = get_env_name(temp->content);
-		if (env_name_check(name) == 1)
-			remove_env(envs, name);
-		if (env_name_check(name) == 0)
-		{
-			flag = 1;
-			print_error("unset", temp->content, 2);
-		}
-		free(name);
-		temp =temp->next;
-	}
-
 	g_exit_status = flag;
 }

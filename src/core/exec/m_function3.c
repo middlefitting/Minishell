@@ -1,15 +1,33 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   m_function3.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:38:21 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:50 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	is_heredoc(t_process *proc)
 {
 	t_redirects	*redirects;
+	t_pipe		*pipe;
 
-	redirects = proc->pipe->cmd->redirects;
-	while (redirects)
+	pipe = proc->pipe;
+	while (pipe)
 	{
-		if (!ft_strcmp (redirects->redirect->type->content, "<<"))
-			proc->heredoc_flag = 1;
-		redirects = redirects->redirects;
+		redirects = pipe->cmd->redirects;
+		while (redirects)
+		{
+			if (!ft_strcmp (redirects->redirect->type->content, "<<"))
+				proc->heredoc_flag = 1;
+			redirects = redirects->redirects;
+		}
+		pipe = pipe->pipe;
 	}
 }
 
@@ -51,6 +69,7 @@ int	heredoc_fork(t_process *proc)
 	}
 	else
 	{
+		signal (SIGINT, SIG_IGN);
 		pid = wait(&status);
 		if (proc->pid == pid)
 			g_exit_status = WEXITSTATUS(status);
@@ -62,13 +81,4 @@ int	heredoc_fork(t_process *proc)
 		}
 	}
 	return (1);
-}
-
-void	fork_error(void)
-{
-	if (errno == EAGAIN)
-		write (1, "minishell: fork: Resource temporarily unavailable\n", 50);
-	while (wait(NULL) != -1)
-		;
-	g_exit_status = 1;
 }

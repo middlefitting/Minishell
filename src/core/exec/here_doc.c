@@ -1,4 +1,16 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:36:02 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:35:51 by jhwang2          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	mk_num(char *str, int num)
 {
@@ -58,9 +70,9 @@ void	rm_heredoc(void)
 
 void	check_heredoc(t_process *proc, t_redirects *redirects)
 {
-	char	*str;
 	int		fd;
 
+	fd = 0;
 	while (redirects)
 	{
 		if (!ft_strcmp (redirects->redirect->type->content, "<<"))
@@ -80,7 +92,7 @@ void	mk_heredoc(t_process *proc)
 {
 	t_pipe	*pipe;
 
-	set_herdoc_signal (0);
+	set_herdoc_signal ();
 	pipe = proc->pipe;
 	while (pipe)
 	{

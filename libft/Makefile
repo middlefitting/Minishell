@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: middlefitting <middlefitting@student.42    +#+  +:+       +#+         #
+#    By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/04 20:38:13 by sechung           #+#    #+#              #
-#    Updated: 2023/03/13 19:25:00 by middlefitti      ###   ########.fr        #
+#    Updated: 2023/03/23 20:39:09 by jhwang2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ OBJS_BONUS	=	$(BNS_SRCS:.c=.o)
 
 NAME		=	libft.a
 RM			=	rm -f
-CC			=	gcc
+CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
 
 ifdef WITH_BONUS
