@@ -1,6 +1,18 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   append_token.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:49:09 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:18:16 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void set_token_type(t_lexer *lexer, t_data *data)
+#include "minishell.h"
+
+void	set_token_type(t_lexer *lexer, t_data *data)
 {
 	char	c;
 
@@ -13,7 +25,7 @@ void set_token_type(t_lexer *lexer, t_data *data)
 		lexer->token->type = WORD;
 }
 
-void append_token_content(t_lexer *lexer, t_data *data)
+void	append_token_content(t_lexer *lexer, t_data *data)
 {
 	char	*renew_content;
 	char	*temp;
@@ -30,15 +42,16 @@ void append_token_content(t_lexer *lexer, t_data *data)
 	lexer->token->content = renew_content;
 }
 
-void append_element(t_lexer *lexer, t_data *data)
+void	append_element(t_lexer *lexer, t_data *data)
 {
 	int	next_quote_flag;
 
 	if (lexer->token == 0)
-		return;
+		return ;
 	if (lexer->token->type == DEFAULT)
 		set_token_type(lexer, data);
-	next_quote_flag = renew_quote_flag(lexer->quote_flag, data->line[lexer->index]);
+	next_quote_flag = renew_quote_flag(lexer->quote_flag,
+			data->line[lexer->index]);
 	if (next_quote_flag == lexer->quote_flag)
 		append_token_content(lexer, data);
 	lexer->quote_flag = next_quote_flag;

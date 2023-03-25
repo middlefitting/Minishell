@@ -1,4 +1,16 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:35:33 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:53:16 by jhwang2          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	exec(t_pipe *tree, t_deque *envp)
 {
@@ -54,6 +66,7 @@ void	exit_proc(t_process *proc)
 	i = 0;
 	while (i <= proc->num_of_pipe)
 	{
+		signal (SIGINT, SIG_IGN);
 		pid = wait (&status);
 		if (pid > 0 || pid == -1)
 			i++;

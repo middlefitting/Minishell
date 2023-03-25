@@ -1,22 +1,30 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_path.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:39:31 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/25 14:02:04 by ahkiler          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	make_path(t_process *proc)
 {
 	char	**execve_option;
 	char	**path_splitted;
 	char	*cmd;
-	int		i;
 
 	set_signal(proc->pid);
 	execve_option = get_option (proc);
 	cmd = proc->pipe->cmd->simple_cmd->file_path->content;
-	i = 0;
-	if (!get_env (proc->envp, "PATH"))
-	{
-		print_error (cmd, 0, 1);
-		exit (127);
-	}
-	path_splitted = m_split (get_env (proc->envp, "PATH"), ':');
+	if (get_env (proc->envp, "PATH"))
+		path_splitted = m_split (get_env (proc->envp, "PATH"), ':');
+	else
+		path_splitted = 0;
 	do_execve (proc, path_splitted, execve_option, cmd);
 }
 
@@ -52,7 +60,7 @@ void	do_execve(t_process *proc, char **path_splitted,
 	i = 0;
 	cmd = m_strjoin ("/", cmd_origin);
 	envp = get_envs_pointer (proc->envp);
-	while (path_splitted[i])
+	while (path_splitted != NULL && path_splitted[i])
 	{
 		path_cmd = m_strjoin (path_splitted[i], cmd);
 		execve (path_cmd, option, envp);

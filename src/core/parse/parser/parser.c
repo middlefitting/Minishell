@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:52:44 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:28:19 by jhwang2          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	simple_cmd_parser(t_cmd *cmd, t_deque *tokens)
 {
@@ -23,9 +35,9 @@ int	redirect_parser(t_redirect *redirect, t_deque *tokens)
 		print_syntax_error("newline");
 		return (0);
 	}
-	if (tokens->top->type == PIPE ||
-		tokens->top->type == REDIRECTION ||
-		tokens->top->type == HEREDOC)
+	if (tokens->top->type == PIPE
+		|| tokens->top->type == REDIRECTION
+		|| tokens->top->type == HEREDOC)
 	{
 		print_syntax_error(tokens->top->content);
 		return (0);
@@ -34,7 +46,7 @@ int	redirect_parser(t_redirect *redirect, t_deque *tokens)
 	return (1);
 }
 
-int redirects_parser(t_redirects **redirects, t_deque *tokens)
+int	redirects_parser(t_redirects **redirects, t_deque *tokens)
 {
 	if (!(*redirects))
 	{
@@ -46,9 +58,8 @@ int redirects_parser(t_redirects **redirects, t_deque *tokens)
 		return (redirects_parser(&((*redirects)->redirects), tokens));
 }
 
-int cmd_parser(t_pipe *pipe, t_deque *tokens)
+int	cmd_parser(t_pipe *pipe, t_deque *tokens)
 {
-	t_token *token;
 	t_cmd	*cmd;
 
 	cmd = init_cmd();
@@ -57,10 +68,11 @@ int cmd_parser(t_pipe *pipe, t_deque *tokens)
 	{
 		if (tokens->top->type == WORD)
 			simple_cmd_parser(cmd, tokens);
-		else if (tokens->top->type == REDIRECTION || tokens->top->type == HEREDOC)
+		else if (tokens->top->type == REDIRECTION
+			|| tokens->top->type == HEREDOC)
 		{
 			if (!redirects_parser(&(cmd->redirects), tokens))
-				return(0);
+				return (0);
 		}
 	}
 	return (1);
@@ -69,10 +81,10 @@ int cmd_parser(t_pipe *pipe, t_deque *tokens)
 int	pipe_parser(t_pipe *pipe, t_deque *tokens)
 {
 	t_token	*token;
-	t_pipe *next_pipe;
+	t_pipe	*next_pipe;
 
-	if (!(tokens->top) ||
-		tokens->top->type == PIPE)
+	if (!(tokens->top)
+		|| tokens->top->type == PIPE)
 	{
 		print_syntax_error("|");
 		return (0);

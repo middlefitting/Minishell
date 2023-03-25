@@ -1,5 +1,16 @@
-#include "parser.h"
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:19:55 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:16:56 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	envs_sort(char **envs)
 {
@@ -72,10 +83,10 @@ int	env_name_check(char *name)
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return(0);
+			return (0);
 		i++;
 	}
-	return(1);
+	return (1);
 }
 
 void	export_env(t_deque *d_envs, t_token *token, int *flag)
@@ -83,7 +94,7 @@ void	export_env(t_deque *d_envs, t_token *token, int *flag)
 	char	*name;
 
 	name = get_env_name(token->content);
-	if(env_name_check(name) == 1)
+	if (env_name_check(name) == 1)
 		env_append(d_envs, token->content);
 	else if (env_name_check(name) == 0)
 	{
@@ -99,8 +110,6 @@ void	ft_export(t_simple_cmd *simple_cmd, t_deque *d_envs)
 	t_token	*temp;
 
 	flag = 0;
-	// if (!simple_cmd)
-		// return ;
 	if (simple_cmd->argv->size == 1)
 		print_export(d_envs, 0);
 	else
