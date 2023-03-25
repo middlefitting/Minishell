@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:53:28 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 21:07:29 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 int	renew_quote_flag(int flag, char c)
 {
@@ -22,7 +34,7 @@ int	renew_quote_flag(int flag, char c)
 	return (flag);
 }
 
-int quote_check(char *line)
+int	quote_check(char *line)
 {
 	int	ind;
 	int	flag;

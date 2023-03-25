@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_struct.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:48:03 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:18:00 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	free_token(t_token *token)
 {
@@ -18,7 +30,7 @@ void	free_deque(t_deque *deque)
 
 void	free_deque_with_token(t_deque *deque)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = popleft(deque);
 	while (temp)

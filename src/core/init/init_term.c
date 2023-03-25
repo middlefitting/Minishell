@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_term.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:48:26 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:18:11 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	init_tflag(struct termios *t)
 {
@@ -7,7 +19,7 @@ void	init_tflag(struct termios *t)
 
 void	init_cc(struct termios *t)
 {
-	t->c_cc[VDISCARD] =0xf;
+	t->c_cc[VDISCARD] = 0xf;
 	t->c_cc[VDSUSP] = 0x19;
 	t->c_cc[VEOF] = 0x04;
 	t->c_cc[VERASE] = 0x7F;

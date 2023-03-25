@@ -1,13 +1,25 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   deque.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:24:32 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:01 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_deque	*get_deque()
+#include "minishell.h"
+
+t_deque	*get_deque(void)
 {
-	t_deque *deque;
+	t_deque	*deque;
 
 	deque = 0;
-	while(!deque)
+	while (!deque)
 		deque = ft_calloc(1, sizeof(t_deque));
-	return deque;
+	return (deque);
 }
 
 void	append(t_deque *deque, t_token *token)
@@ -48,7 +60,7 @@ void	appendleft(t_deque *deque, t_token *token)
 
 t_token	*pop(t_deque *deque)
 {
-	t_token *result;
+	t_token	*result;
 
 	result = deque->bottom;
 	if (deque->size == 0)
@@ -71,7 +83,7 @@ t_token	*pop(t_deque *deque)
 
 t_token	*popleft(t_deque *deque)
 {
-	t_token *result;
+	t_token	*result;
 
 	result = deque->top;
 	if (deque->size == 0)

@@ -1,4 +1,16 @@
-#include "parser.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:34:49 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:17 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	env_update(t_token *env, char *name, char *content)
 {
@@ -37,7 +49,7 @@ char	*get_env_content(char *raw)
 
 void	env_append(t_deque *envs, char *raw)
 {
-	t_token *temp;
+	t_token	*temp;
 	t_token	*env;
 	char	*name;
 	char	*content;
@@ -59,7 +71,7 @@ void	env_append(t_deque *envs, char *raw)
 
 void	env_init(t_data *data, char **envp)
 {
-	int 	i;
+	int	i;
 
 	i = 0;
 	data->envs = get_deque();

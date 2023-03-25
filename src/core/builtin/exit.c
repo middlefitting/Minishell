@@ -1,5 +1,16 @@
-#include "parser.h"
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:20:27 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/25 14:06:43 by ahkiler          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	print_exit_error_digit(char *msg)
 {
@@ -24,6 +35,7 @@ int	exit_arg_check(char *content)
 			return (0);
 		i++;
 	}
+	return (1);
 }
 
 void	ft_exit(t_simple_cmd *simple_cmd)
@@ -34,11 +46,18 @@ void	ft_exit(t_simple_cmd *simple_cmd)
 		g_exit_status = 1;
 		return ;
 	}
-	if (simple_cmd->argv->size == 2 &&
-		!exit_arg_check(simple_cmd->argv->top->next->content))
+	if (simple_cmd->argv->size == 2)
 	{
-		print_exit_error_digit(simple_cmd->argv->top->next->content);
-		exit(255);
+		if (!exit_arg_check(simple_cmd->argv->top->next->content))
+		{
+			print_exit_error_digit(simple_cmd->argv->top->next->content);
+			exit(255);
+		}
+		else
+		{
+			ft_putendl_fd("exit", 1);
+			exit (ft_atoi(simple_cmd->argv->top->next->content) % 256);
+		}
 	}
 	ft_putendl_fd("exit", 1);
 	exit(0);

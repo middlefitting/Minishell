@@ -1,9 +1,21 @@
-#include "parser.h"
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:53:37 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:19:00 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 int	lexer(t_data *data)
 {
-	t_lexer lexer;
+	t_lexer	lexer;
+
 	init_lexer(&lexer);
 	while (data->line[lexer.index])
 	{
@@ -15,7 +27,7 @@ int	lexer(t_data *data)
 	data->tokens = lexer.tokens;
 	if (data->tokens->size == 0)
 		return (0);
-	return(1);
+	return (1);
 }
 
 int	parser(t_data *data)

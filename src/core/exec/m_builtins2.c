@@ -1,4 +1,16 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   m_builtins2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:36:17 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:39 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 int	check_isbuiltins(t_process *proc)
 {
@@ -51,7 +63,6 @@ void	m_cd(t_process *proc, int flag)
 	char	*tmp;
 	int		opt_flag;
 
-
 	path = 0;
 	if (proc->pipe->cmd->simple_cmd->argv->top->next)
 		path = proc->pipe->cmd->simple_cmd->argv->top->next->content;
@@ -101,52 +112,4 @@ char	*check_cdopt(t_process *proc, char *path, int *opt_flag)
 		*opt_flag = 0;
 		return (ft_strdup (path));
 	}
-}
-
-void	check_patherror(char *path, char *home, int opt_flag)
-{
-	int	error;
-	int	i;
-
-	error = 0;
-	i = 0;
-	if (path == NULL && home == NULL)
-		error = 1;
-	else
-	{
-		error = chdir (path);
-		if (error != 1 && opt_flag == 2)
-		{
-			while (path[i])
-				write (1, &path[i++], 1);
-			write (1, "\n", 1);
-		}
-	}
-	if (error)
-		path_error (path, home, opt_flag);
-	else
-		g_exit_status = 0;
-	return ;
-}
-
-void	m_pwd(t_process *proc, int flag)
-{
-	char	*path;
-	int		i;
-
-	i = 0;
-	path = getcwd (NULL, 0);
-	if (path == NULL)
-	{
-		free (path);
-		g_exit_status = 1;
-		mexit (flag, g_exit_status);
-	}
-	while (path[i] != '\0')
-		write (STDOUT_FILENO, &path[i++], 1);
-	write (STDOUT_FILENO, "\n", 1);
-	free (path);
-	if (proc->num_of_pipe == 0)
-		recover_std (proc);
-	mexit (flag, g_exit_status);
 }

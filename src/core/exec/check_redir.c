@@ -1,4 +1,16 @@
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_redir.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:35:14 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:31:00 by jhwang2          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	check_redir(t_process *proc)
 {
@@ -21,9 +33,9 @@ void	check_redir(t_process *proc)
 void	check_infile(t_process *proc, t_redirects *redirects,
 	t_token *file, char *content)
 {
-	char	*str;
 	int		fd;
 
+	fd = 0;
 	if (!ft_strcmp (content, "<<"))
 	{
 		fd = open (proc->heredoc_file[proc->cmd - 2], O_RDONLY);
@@ -41,6 +53,7 @@ void	check_outfile(t_process *proc, t_token *file, char *content)
 {
 	int	fd;
 
+	fd = 0;
 	if (!ft_strcmp (content, ">>"))
 		fd = open (file->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else if (!ft_strcmp (content, ">"))

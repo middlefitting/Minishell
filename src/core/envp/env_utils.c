@@ -1,5 +1,16 @@
-#include "parser.h"
-#include "exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/23 19:34:20 by sechung           #+#    #+#             */
+/*   Updated: 2023/03/23 20:17:05 by sechung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 char	*get_env(t_deque *envs, char *name)
 {
@@ -31,14 +42,14 @@ char	*get_env(t_deque *envs, char *name)
 
 void	remove_env(t_deque *envs, char *name)
 {
-	t_token *env;
+	t_token	*env;
 	int		s;
 
 	s = 0;
 	if (!envs->top)
 		return ;
-	while (ft_strcmp(name, envs->top->name) != 0 &&
-			s < envs->size)
+	while (ft_strcmp(name, envs->top->name) != 0
+		&& s < envs->size)
 	{
 		env = popleft(envs);
 		append(envs, env);
