@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+         #
+#    By: middlefitting <middlefitting@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/23 20:19:22 by sechung           #+#    #+#              #
-#    Updated: 2023/03/25 13:38:21 by ahkiler          ###   ########.fr        #
+#    Updated: 2023/03/27 12:47:24 by middlefitti      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,10 @@ CFLAGS		=	-Wall -Wextra -Werror
 LFTDIR		=	libft
 SRCDIR		=	src
 INCDIR		=	./include
-LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L /usr/local/opt/readline/lib
-INCS		=	-I $(LFTDIR) -I $(INCDIR) -I /usr/local/opt/readline/include
+# LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L /usr/local/opt/readline/lib
+# INCS		=	-I $(LFTDIR) -I $(INCDIR) -I /usr/local/opt/readline/include
+LIBS		=	-lncurses $(LFTDIR)/libft.a -lreadline -L/opt/homebrew/opt/readline/lib
+INCS		=	-I $(LFTDIR) -I $(INCDIR) -I/opt/homebrew/opt/readline/include
 
 SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/parse/parse.c \
@@ -59,7 +61,10 @@ SRCS		=	$(SRCDIR)/core/main.c \
 				$(SRCDIR)/core/builtin/export.c \
 				$(SRCDIR)/core/builtin/unset.c \
 				$(SRCDIR)/core/builtin/exit.c \
-				$(SRCDIR)/core/utils/utils.c
+				$(SRCDIR)/core/utils/utils.c \
+				$(SRCDIR)/core/heredoc_parser/heredoc_parser.c \
+				$(SRCDIR)/core/builtin/ft_longtoi.c \
+				$(SRCDIR)/core/env_parser/renew_line.c
 OBJS		=	${SRCS:.c=.o}
 
 all :

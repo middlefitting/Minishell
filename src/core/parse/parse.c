@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:53:37 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/23 20:19:00 by sechung          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:41:53 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ int	parse(t_data *data)
 		return (0);
 	}
 	if (!lexer(data))
+	{
+		g_exit_status = 0;
 		return (0);
+	}
 	if (!parser(data))
 	{
 		g_exit_status = 258;

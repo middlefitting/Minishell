@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   m_builtins2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sechung <sechung@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:36:17 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/23 20:17:39 by sechung          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:49:32 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	do_builtins(t_process *proc, int flag)
 	else if (!ft_strcmp ("env", cmd))
 		m_env(proc, flag);
 	else if (!ft_strcmp ("exit", cmd))
-		ft_exit(proc->pipe->cmd->simple_cmd);
+		ft_exit(proc->pipe->cmd->simple_cmd, proc->num_of_pipe);
 	if (flag)
 		exit (g_exit_status);
 	else
