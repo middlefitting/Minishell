@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhwang2 <jhwang2@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:36:02 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/23 20:35:51 by jhwang2          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:45:23 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ void	check_heredoc(t_process *proc, t_redirects *redirects)
 		{
 			fd = open (proc->heredoc_file[proc->fd_idx],
 					O_WRONLY | O_TRUNC | O_CREAT, 0644);
-			if (write_str(redirects->redirect->file_name->content, fd))
+			if (write_str(redirects->redirect->file_name->content,
+					fd, proc->envp))
 				return ;
 			else
 				break ;

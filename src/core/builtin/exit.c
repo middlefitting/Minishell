@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:20:27 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/25 14:06:43 by ahkiler          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:49:16 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,41 +24,44 @@ void	print_exit_error_arg(void)
 	ft_putendl_fd("minishell: exit: too many arguments", 2);
 }
 
-int	exit_arg_check(char *content)
+void	single_arg_check(t_simple_cmd *simple_cmd, int num_of_pipe)
 {
-	int	i;
-
-	i = 0;
-	while (content[i])
+	if (simple_cmd->argv->size == 1)
 	{
-		if (!ft_isdigit(content[i]))
-			return (0);
-		i++;
+		g_exit_status = 0;
+		if (num_of_pipe == 0)
+			ft_putendl_fd("exit", 1);
+		exit(0);
 	}
-	return (1);
 }
 
-void	ft_exit(t_simple_cmd *simple_cmd)
+void	numeric_check(int flag, t_simple_cmd *simple_cmd)
 {
+	if (!flag)
+	{
+		g_exit_status = 255;
+		print_exit_error_digit(simple_cmd->argv->top->next->content);
+		exit(255);
+	}
+}
+
+void	ft_exit(t_simple_cmd *simple_cmd, int num_of_pipe)
+{
+	int result;
+	int	flag;
+
+	flag = 1;
+	single_arg_check(simple_cmd, num_of_pipe);
+	result = ft_longtoi(simple_cmd->argv->top->next->content, &flag);
+	numeric_check(flag, simple_cmd);
 	if (simple_cmd->argv->size > 2)
 	{
 		print_exit_error_arg();
 		g_exit_status = 1;
 		return ;
 	}
-	if (simple_cmd->argv->size == 2)
-	{
-		if (!exit_arg_check(simple_cmd->argv->top->next->content))
-		{
-			print_exit_error_digit(simple_cmd->argv->top->next->content);
-			exit(255);
-		}
-		else
-		{
-			ft_putendl_fd("exit", 1);
-			exit (ft_atoi(simple_cmd->argv->top->next->content) % 256);
-		}
-	}
-	ft_putendl_fd("exit", 1);
-	exit(0);
+	g_exit_status = (result % 256);
+	if (num_of_pipe == 0)
+		ft_putendl_fd("exit", 1);
+	exit(result % 256);
 }

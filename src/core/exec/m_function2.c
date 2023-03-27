@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   m_function2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:38:16 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/25 13:48:19 by ahkiler          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:45:20 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ size_t	m_strlcat(char *dst, const char *src, size_t dstsize)
 	return (len_dns);
 }
 
-int	write_str(char *content, int fd)
+int	write_str(char *content, int fd, t_deque *envs)
 {
 	char	*str;
 
@@ -81,17 +81,17 @@ int	write_str(char *content, int fd)
 		{
 			free(str);
 			close(fd);
-			g_exit_status = 0;
 			return (1);
 		}
 		if (!ft_strcmp (content, str))
 		{
 			free (str);
 			close (fd);
-			g_exit_status = 0;
 			return (0);
 		}
-		write (fd, str, ft_strlen (str));
+		str = heredoc_parser(str, envs);
+		if (str)
+			write (fd, str, ft_strlen (str));
 		write (fd, "\n", 1);
 		free (str);
 	}

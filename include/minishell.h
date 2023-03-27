@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahkiler <ahkiler@student.42.fr>            +#+  +:+       +#+        */
+/*   By: middlefitting <middlefitting@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 19:39:58 by sechung           #+#    #+#             */
-/*   Updated: 2023/03/25 13:55:16 by ahkiler          ###   ########.fr       */
+/*   Updated: 2023/03/27 12:49:11 by middlefitti      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void			check_file(t_process *proc, t_redirects *redirects, int fd);
 
 void			mk_heredoc(t_process *proc);
 void			check_heredoc(t_process *proc, t_redirects *redirects);
-int				write_str(char *content, int fd);
+int				write_str(char *content, int fd, t_deque *envs);
 void			mk_num(char *str, int num);
 char			*mk_filename(void);
 void			rm_heredoc(void);
@@ -243,5 +243,8 @@ void			init_lexer(t_lexer *lexer);
 void			append_element(t_lexer *lexer, t_data *data);
 void			init_tflag(struct termios *t);
 void			init_cc(struct termios *t);
-void			ft_exit(t_simple_cmd *simple_cmd);
+void			ft_exit(t_simple_cmd *simple_cmd, int num_of_pipe);
+void			renew_line(t_data *data, int *s_e, int *index, int quote_flag);
+char			*heredoc_parser(char *line, t_deque *envs);
+int				ft_longtoi(const char *str, int *flag);
 #endif
